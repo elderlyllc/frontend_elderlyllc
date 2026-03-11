@@ -1,0 +1,244 @@
+/* =========================
+   THEME VARIABLES
+========================= */
+:root {
+  --page-bg: #d5f6ef;
+  --header-bg: #ffffff;
+  --footer-bg: rgba(21, 132, 237, 0.22);
+  --text-color: #040c24;
+  --card-bg: #ffffff;
+  --accent: #fea789;
+  --border: #eff0f6;
+}
+
+/* =========================
+   IONIC BASE
+========================= */
+ion-content {
+  --background: var(--page-bg);
+  color: var(--text-color);
+}
+
+/* Remove Ionic default borders/shadows */
+ion-header, ion-footer, ion-toolbar {
+  box-shadow: none !important;
+  border: none !important;
+}
+
+.app-ion-header,
+.app-ion-footer {
+  --background: transparent;
+  background: transparent;
+}
+
+ion-toolbar {
+  --background: transparent;
+  --border-width: 0;
+  padding: 0;
+}
+
+/* =========================
+   GLOBAL RESET
+========================= */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  overflow-x: hidden;
+}
+
+body {
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  color: var(--text-color);
+  font-weight: 300;
+}
+
+/* Text */
+h1,h2,h3,h4,h5,h6 {
+  margin: 0 0 10px 0;
+  color: #494949;
+}
+
+p {
+  margin: 0;
+  font-size: 15px;
+  color: var(--text-color);
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+  transition: 0.3s;
+}
+
+/* =========================
+   HEADER STYLE
+========================= */
+.header-box {
+  background: var(--header-bg);
+  border-radius: 15px;
+  margin: 10px;
+  padding: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.logo img {
+  max-width: 150px;
+  display: block;
+}
+
+/* =========================
+   BODY CONTENT
+========================= */
+section.body {
+  padding: 20px 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* =========================
+   LOGIN CARD
+========================= */
+.login-section {
+  background: var(--card-bg);
+  width: min(90vw, 520px);
+  padding: 25px;
+  border-radius: 15px;
+  box-shadow: rgba(0,0,0,0.10) 0px 20px 25px -5px,
+              rgba(0,0,0,0.04) 0px 10px 10px -5px;
+}
+
+.login-section .box-heading {
+  text-align: center;
+  padding-bottom: 20px;
+}
+
+.login-section .box-heading h4 {
+  font-size: 28px;
+  text-transform: uppercase;
+}
+
+/* Social Login */
+.login-with {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-bottom: 30px;
+}
+
+.login-with .icon {
+  border: 1px solid var(--accent);
+  width: 55px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 5px;
+  transition: 0.3s;
+}
+
+.login-with .icon img {
+  max-width: 30px;
+}
+
+/* Divider */
+hr.divider {
+  border-top: 1px solid var(--border);
+  margin: 30px 0;
+}
+
+/* =========================
+   FORM
+========================= */
+.login-form .is-floating-label {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.login-form .input-icon {
+  background: #ffd9c6;
+  width: 60px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 5px 0 0 5px;
+}
+
+.login-form .input-icon img {
+  max-width: 24px;
+}
+
+.login-form .form-control {
+  height: 45px;
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: 0 5px 5px 0;
+  padding: 0 15px;
+  font-size: 15px;
+  background: #fff;
+}
+
+.login-form .form-control:focus {
+  border-color: var(--accent);
+  outline: none;
+}
+
+/* Button */
+.login {
+  width: 100%;
+  border: none;
+  background: var(--accent);
+  padding: 15px;
+  border-radius: 5px;
+  color: #fff;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+/* =========================
+   FOOTER
+========================= */
+ion-footer {
+  background: var(--footer-bg);
+}
+
+footer .ftr-box {
+  display: flex;
+  justify-content: space-around;
+  padding: 14px 0;
+  align-items: center;
+}
+
+footer .icon-box {
+  text-align: center;
+}
+
+footer .icon-box img {
+  max-width: 28px;
+  display: block;
+  margin: 0 auto 6px auto;
+}
+
+footer .icon-box span {
+  font-size: 12px;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+@media (max-width: 420px) {
+  .login-section {
+    width: 92vw;
+  }
+}
