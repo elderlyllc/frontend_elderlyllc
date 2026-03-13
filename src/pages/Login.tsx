@@ -34,8 +34,6 @@ const Login: React.FC = () => {
     <MainLayout>
       <IonContent fullscreen className="ion-padding">
 
-
-
         {/* Login Section */}
         <div style={{
           background: "#fff",
