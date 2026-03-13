@@ -48,6 +48,7 @@ import Home from './pages/Home';
 import Registration from './pages/Registration';
 import ForgetPassword from './pages/ForgetPasswod';
 import Dashboard from './pages/dashboard';
+import Notification from './pages/Notification';
 
 setupIonicReact();
 
@@ -64,6 +65,8 @@ const App: React.FC = () => (
               <Route exact path="/forget-password" component={ForgetPassword}>
              </Route>
              <Route exact path="/dashboard" component={Dashboard}>
+             </Route>
+              <Route exact path="/notification" component={Notification}>
              </Route>
           <Route exact path="/home" component={Home}>
           </Route>
