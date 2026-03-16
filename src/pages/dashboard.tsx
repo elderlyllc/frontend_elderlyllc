@@ -115,22 +115,6 @@ const Dashboard: React.FC = () => {
         </IonCardContent>
       </IonCard>
 
-      {/* Emergency Button */}
-      <button
-        style={{
-          width:"100%",
-          marginTop:"20px",
-          padding:"15px",
-          borderRadius:"12px",
-          background:"#ff4d4f",
-          color:"white",
-          fontSize:"18px",
-          border:"none"
-        }}
-      >
-        🚨 Emergency Help
-      </button>
-
       {/* Search Result */}
       {results.length > 0 && (
         <IonList style={{ marginTop:"10px" }}>
