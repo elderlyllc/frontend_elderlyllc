@@ -7,28 +7,40 @@ import MainLayout from "./layout/mainLayout";
 import { logoApple } from "ionicons/icons";
 import React, { useState } from "react";
 import { IonToast } from "@ionic/react";
+import {loginUser}  from "../service/AuthicationService";
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
-  const submit = () => {
-    if (!email) {
-      setToastMessage("Email is required");
-      setShowToast(true);
-      return;
-    }
+  const submit = async () => {
+  if (!email) {
+    setToastMessage("Email is required");
+    setShowToast(true);
+    return;
+  }
 
-    if (!password) {
-      setToastMessage("Password is required");
-      setShowToast(true);
-      return;
-    }
+  if (!password) {
+    setToastMessage("Password is required");
+    setShowToast(true);
+    return;
+  }
 
-    console.log("Email:", email);
-    console.log("Password:", password);
-  };
+  try {
+    const data = await loginUser(email, password);
+
+    console.log("Login successful:", data);
+    localStorage.setItem("token", data.token);
+
+  } catch (error: any) {
+    setToastMessage(error.message);
+    setShowToast(true);
+  }
+
+  console.log("Email:", email);
+  console.log("Password:", password);
+};
 
   return (
     <MainLayout>
