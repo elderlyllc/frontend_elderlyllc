@@ -68,6 +68,7 @@ const App: React.FC = () => (
              </Route>
               <Route exact path="/notification" component={Notification}>
              </Route>
+             
           <Route exact path="/home" component={Home}>
           </Route>
           <Route exact path="/profile" component={Profile}>

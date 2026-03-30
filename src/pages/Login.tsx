@@ -5,15 +5,26 @@ import {
 
 import MainLayout from "./layout/mainLayout";
 import { logoApple } from "ionicons/icons";
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import { IonToast } from "@ionic/react";
 import {loginUser}  from "../service/AuthicationService";
+import { useHistory } from "react-router-dom";
+
+
 
 const Login: React.FC = () => {
+  const history = useHistory();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
+
+  useEffect(() => {
+  let token =  localStorage.getItem("token");
+  if(token){
+    history.push("/dashboard");
+  }
+}, []);
   const submit = async () => {
   if (!email) {
     setToastMessage("Email is required");
@@ -32,14 +43,18 @@ const Login: React.FC = () => {
 
     console.log("Login successful:", data);
     localStorage.setItem("token", data.token);
+    if(data.token){
+       
+     history.push("/dashboard");
+    }
 
   } catch (error: any) {
     setToastMessage(error.message);
     setShowToast(true);
   }
 
-  console.log("Email:", email);
-  console.log("Password:", password);
+  // console.log("Email:", email);
+  // console.log("Password:", password);
 };
 
   return (
