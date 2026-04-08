@@ -49,6 +49,7 @@ import Registration from './pages/Registration';
 import ForgetPassword from './pages/ForgetPasswod';
 import Dashboard from './pages/dashboard';
 import Notification from './pages/Notification';
+import Subscription from './pages/subscription';
 
 setupIonicReact();
 
@@ -67,6 +68,8 @@ const App: React.FC = () => (
              <Route exact path="/dashboard" component={Dashboard}>
              </Route>
               <Route exact path="/notification" component={Notification}>
+             </Route>
+               <Route exact path="/subscription" component={Subscription}>
              </Route>
              
           <Route exact path="/home" component={Home}>

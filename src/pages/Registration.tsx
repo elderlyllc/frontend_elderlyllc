@@ -7,15 +7,23 @@ import MainLayout from "./layout/mainLayout";
 import { logoApple } from "ionicons/icons";
 import React, { useState } from "react";
 import { IonToast } from "@ionic/react";
+import { registerUser } from "../service/AuthicationService";
+import { useHistory } from "react-router-dom";
+import { useGoogleLogin } from "@react-oauth/google";
+import {
+  AppleButton,
+  appleAuth,
+} from '@invertase/react-native-apple-authentication';
 
 
 const Registration: React.FC = () => {
+   const history = useHistory();
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
-  const submit = () => {
+  const submit = async () => {
 
     if (!fullName) {
       setToastMessage("Full Name is required");
@@ -34,18 +42,54 @@ const Registration: React.FC = () => {
       setShowToast(true);
       return;
     }
+    try {
+        const data = await registerUser(fullName, email, password);
+    
+        console.log("Registration successful:", data);
+        localStorage.setItem("token", data.token);
+        if(data.token){
+           
+         history.push("/login");
+        }
+    
+      } catch (error: any) {
+        setToastMessage(error.message);
+        setShowToast(true);
+      }
 
-    console.log("Full Name:", fullName);
-    console.log("Email:", email);
-    console.log("Password:", password);
+    // console.log("Full Name:", fullName);
+    // console.log("Email:", email);
+    // console.log("Password:", password);
   };
+  const GoogleLogin = useGoogleLogin({
+    onSuccess: (tokenResponse) => {
+      console.log("Login Success:", tokenResponse);
+    },
+    onError: () => {
+      console.log("Login Failed");
+    }
+  });
+  // async function onAppleButtonPress() {
+  //   // Start the sign-in request
+  //   const appleAuthRequestResponse = await appleAuth.performRequest({
+  //     requestedOperation: appleAuth.Operation.LOGIN,
+  //     requestedScopes: [appleAuth.Scope.EMAIL, appleAuth.Scope.FULL_NAME],
+  //   });
+
+  //   console.log('Apple login response:', appleAuthRequestResponse);
+
+  //   // Example: send identityToken to backend for validation
+  //   if (appleAuthRequestResponse.identityToken) {
+  //     // send token to server
+  //   }
+  // }
 
   return (
     <MainLayout>
       <IonContent fullscreen className="ion-padding">
 
 
-        {/* Login Section */}
+        {/* Registration Section */}
         <div style={{
           background: "#fff",
           padding: "20px",
@@ -138,6 +182,7 @@ const Registration: React.FC = () => {
                 fontWeight: "500",
                 boxShadow: "0 1px 4px rgba(0,0,0,0.08)"
               }}
+              onClick={() => GoogleLogin()}
             >
               <img
                 src="https://www.svgrepo.com/show/475656/google-color.svg"
@@ -169,6 +214,7 @@ const Registration: React.FC = () => {
                 fontWeight: "500",
                 boxShadow: "0 1px 4px rgba(0,0,0,0.08)"
               }}
+              // onClick={onAppleButtonPress}
             >
               <IonIcon icon={logoApple} style={{ fontSize: "20px" }} />
               Continue with Apple

@@ -12,7 +12,7 @@ const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
       <IonContent fullscreen>
         {children}
       </IonContent>
-    { location.pathname !== "/login"  && location.pathname !== "/forget-password" && location.pathname !== "/registration" &&
+    { location.pathname !== "/login"  && location.pathname !== "/forget-password" && location.pathname !== "/subscription" && location.pathname !== "/registration" &&
         <Footer />
     }
     

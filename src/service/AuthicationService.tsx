@@ -15,3 +15,20 @@ export const loginUser = async (email: string, password: string) => {
     );
   }
 };
+
+
+export const registerUser = async (fullName: string, email: string, password: string) => {
+  try {
+    const response = await api.post(apiEndpoints.register, {
+      fullName,
+      email,
+      password
+    });
+
+    return response.data; // Axios already parses JSON
+  } catch (error: any) {
+    throw new Error(
+      error.response?.data?.message || "Registration failed"
+    );
+  }
+};

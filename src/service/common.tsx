@@ -1,5 +1,5 @@
 const apiLocalRootURL = 'http://localhost:8080';
-const serverRootURL = 'http://18.219.167.39:8000';
+const serverRootURL = 'http://3.131.133.209:8000';
 
 // Determine which API root URL to use based on the environment
 //const apiRootURL = process.env.NODE_ENV === 'development' ? apiLocalRootURL : serverRootURL;

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   IonContent,
   IonSearchbar,
@@ -11,8 +11,16 @@ import {
 
 import { medicalOutline, alertCircleOutline, personOutline } from "ionicons/icons";
 import MainLayout from "./layout/mainLayout";
+import { useHistory } from "react-router-dom";
 
 const Dashboard: React.FC = () => {
+    const history = useHistory();
+   useEffect(() => {
+    let token =  localStorage.getItem("token");
+    if(!token){
+      history.push("/login");
+    }
+  }, []);
 
   const data = ["Apple", "Banana", "Mango", "Orange", "Grapes", "Pineapple"];
 

@@ -9,6 +9,7 @@ import React, { useState,useEffect } from "react";
 import { IonToast } from "@ionic/react";
 import {loginUser}  from "../service/AuthicationService";
 import { useHistory } from "react-router-dom";
+import { useGoogleLogin } from "@react-oauth/google";
 
 
 
@@ -45,7 +46,7 @@ const Login: React.FC = () => {
     localStorage.setItem("token", data.token);
     if(data.token){
        
-     history.push("/dashboard");
+     history.push("/subscription");
     }
 
   } catch (error: any) {
@@ -56,6 +57,15 @@ const Login: React.FC = () => {
   // console.log("Email:", email);
   // console.log("Password:", password);
 };
+const GoogleLogin = useGoogleLogin({
+    onSuccess: (tokenResponse) => {
+      console.log("Login Success:", tokenResponse);
+    },
+    onError: () => {
+      console.log("Login Failed");
+    }
+  });
+
 
   return (
     <MainLayout>
@@ -144,6 +154,8 @@ const Login: React.FC = () => {
                 fontWeight: "500",
                 boxShadow: "0 1px 4px rgba(0,0,0,0.08)"
               }}
+              onClick={() => GoogleLogin()}
+             
             >
               <img
                 src="https://www.svgrepo.com/show/475656/google-color.svg"
