@@ -1,11 +1,11 @@
 import MainLayout from './layout/mainLayout';
 
-const Profile: React.FC = () => {
+const NotFound: React.FC = () => {
   return (
    <MainLayout>
-            Profile
+            Not Found
    </MainLayout>
   );
 };
 
-export default Profile;
+export default NotFound;

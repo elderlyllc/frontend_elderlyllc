@@ -9,6 +9,7 @@ const apiEndpoints = {
   login: `${apiRootURL}/api/login`,
   register: `${apiRootURL}/api/register`,
   forgetPassword: `${apiRootURL}/api/forget-password`,
+  subscriptionList: `${apiRootURL}/api/subscriptions`,
   baseURL: apiRootURL
 };
 

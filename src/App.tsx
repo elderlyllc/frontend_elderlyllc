@@ -1,4 +1,4 @@
-import { Redirect, Route } from 'react-router-dom';
+import { Redirect, Route, Switch } from 'react-router-dom';
 import {
   IonApp,
   IonIcon,
@@ -50,6 +50,8 @@ import ForgetPassword from './pages/ForgetPasswod';
 import Dashboard from './pages/dashboard';
 import Notification from './pages/Notification';
 import Subscription from './pages/subscription';
+import Location from './pages/Location';
+import NotFound from './pages/NotFound';
 
 setupIonicReact();
 
@@ -59,29 +61,48 @@ const App: React.FC = () => (
       {/* <IonTabs> */}
      
         <IonRouterOutlet>
-            <Route exact path="/login" component={Login}>
-             </Route>
-             <Route exact path="/registration" component={Registration}>
-             </Route>
-              <Route exact path="/forget-password" component={ForgetPassword}>
-             </Route>
-             <Route exact path="/dashboard" component={Dashboard}>
-             </Route>
-              <Route exact path="/notification" component={Notification}>
-             </Route>
-               <Route exact path="/subscription" component={Subscription}>
-             </Route>
-             
-          <Route exact path="/home" component={Home}>
+        <Switch>
+          <Route exact path="/login">
+            <Login />
           </Route>
-          <Route exact path="/profile" component={Profile}>
+          <Route exact path="/registration">
+            <Registration />
           </Route>
-          <Route path="/more" component={Home}>
+          <Route exact path="/forget-password">
+            <ForgetPassword />
+          </Route>
+          <Route exact path="/dashboard">
+            <Dashboard />
+          </Route>
+          <Route exact path="/notification">
+            <Notification />
+          </Route>
+          <Route exact path="/not-found">
+            <NotFound />
+          </Route>
+          <Route exact path="/subscription">
+            <Subscription />
+          </Route>
+          <Route exact path="/location">
+            <Location />
+          </Route>
+          <Route exact path="/home">
+            <Home />
+          </Route>
+          <Route exact path="/profile">
+            <Profile />
+          </Route>
+          <Route path="/more">
+            <Home />
           </Route>
           <Route exact path="/">
             <Redirect to="/login" />
           </Route>
-        </IonRouterOutlet>
+          <Route>
+            <NotFound />
+          </Route>
+        </Switch>
+      </IonRouterOutlet>
         
       {/* </IonTabs> */}
     </IonReactRouter>

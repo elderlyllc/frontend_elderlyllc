@@ -1,13 +1,15 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState,useEffect, use } from "react";
 import { IonButton, IonContent, IonIcon } from "@ionic/react";
 import MainLayout from "./layout/mainLayout";
 import "./Subscription.css";
 import { leafOutline, star, diamond } from "ionicons/icons";
+import {subscriptionList}  from "../service/Subscription";
 
 type PlanId = "basic" | "standard" | "premium";
 
 const Subscription: React.FC = () => {
   const [selectedPlan, setSelectedPlan] = useState<PlanId | null>(null);
+  const [subscriptionData, setSubscriptionData] = useState<any>(null);
   const contentRef = useRef<any>(null);
   const planRefs = useRef<Record<PlanId, HTMLDivElement | null>>({
     basic: null,
@@ -36,6 +38,21 @@ const Subscription: React.FC = () => {
       icon: diamond,
     },
   ];
+  useEffect(() => {
+    //call subscription API to get the current subscription status and update the UI accordingly
+    const fetchSubscription = async () => {
+      try {
+        const data = await subscriptionList();
+        console.log("Subscription data:", data);
+        setSubscriptionData(data);
+        // Update UI based on subscription status if needed
+      } catch (error: any) {
+        console.error("Error fetching subscription data:", error.message);
+      }
+    };
+
+    fetchSubscription();
+  },[]);
 
   const handleSubscribe = (planId: PlanId) => {
     alert(`Subscribed to ${planId}`);
@@ -99,6 +116,11 @@ const Subscription: React.FC = () => {
             <p className="subscription-subtitle">
               Choose the plan that fits you best
             </p>
+            {subscriptionData && (
+              <p className="current-subscription">
+                Current Subscription: {subscriptionData.currentPlan || 'None'}
+              </p>
+            )}
           </div>
 
           <div className="plans-list">
