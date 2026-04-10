@@ -50,7 +50,9 @@ const Login: React.FC = () => {
     }
 
   } catch (error: any) {
-    setToastMessage(error.message);
+    console.log("Login failed:", error);
+    const errorMessage = error.response?.data?.error || error.response?.data?.message || error.message || "Login failed";
+    setToastMessage(errorMessage);
     setShowToast(true);
   }
 
