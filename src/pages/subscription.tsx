@@ -1,64 +1,91 @@
-import React, { useRef, useState,useEffect, use } from "react";
-import { IonButton, IonContent, IonIcon } from "@ionic/react";
+import React, { useRef, useState, useEffect } from "react";
+import { IonButton, IonContent, IonIcon, useIonRouter } from "@ionic/react";
 import MainLayout from "./layout/mainLayout";
-import "./Subscription.css";
 import { leafOutline, star, diamond } from "ionicons/icons";
 import {subscriptionList}  from "../service/Subscription";
+import { useHistory } from "react-router-dom";
 
-type PlanId = "basic" | "standard" | "premium";
+interface SubscriptionDetail {
+  id: number;
+  subscription_id: number;
+  monthly: boolean;
+  yearly: boolean;
+  amount: string;
+  created_at: string;
+  created_by: number;
+}
+
+interface ApiSubscriptionData {
+  id: number;
+  subscription_type: string;
+  created_at: string;
+  updated_at: string;
+  details: SubscriptionDetail[];
+}
+
+interface Plan {
+  id: string | number;
+  name: string;
+  price: string;
+  icon: string;
+  best?: boolean;
+  subscriptionId: number;
+  details?: SubscriptionDetail[];
+}
 
 const Subscription: React.FC = () => {
-  const [selectedPlan, setSelectedPlan] = useState<PlanId | null>(null);
-  const [subscriptionData, setSubscriptionData] = useState<any>(null);
+  const history = useHistory();
+  const [selectedPlan, setSelectedPlan] = useState<string | number | null>(null);
+  const [subscriptionDataList, setSubscriptionDataList] = useState<ApiSubscriptionData[]>([]);
+  const [plans, setPlans] = useState<Plan[]>([]);
   const contentRef = useRef<any>(null);
-  const planRefs = useRef<Record<PlanId, HTMLDivElement | null>>({
-    basic: null,
-    standard: null,
-    premium: null,
-  });
+  const planRefs = useRef<Record<string | number, HTMLDivElement | null>>({});
 
-  const plans = [
-    {
-      id: "basic" as PlanId,
-      name: "Basic",
-      price: "$19.99",
-      icon: leafOutline,
-    },
-    {
-      id: "standard" as PlanId,
-      name: "Standard",
-      price: "$29.99",
-      icon: star,
-      best: true,
-    },
-    {
-      id: "premium" as PlanId,
-      name: "Premium",
-      price: "$49.99",
-      icon: diamond,
-    },
-  ];
+  // Map subscription types to icons
+  const iconMap: Record<string, string> = {
+    basic: leafOutline,
+    standard: star,
+    premium: diamond,
+  };
+
+  // Transform API response to plan format
+  const transformSubscriptionsToPlans = (data: ApiSubscriptionData[]): Plan[] => {
+    return data.map((subscription, index) => {
+      const detail = subscription.details[0]; // Get first detail
+      const typeLower = subscription.subscription_type.toLowerCase();
+      
+      return {
+        id: subscription.id,
+        name: subscription.subscription_type.charAt(0).toUpperCase() + subscription.subscription_type.slice(1),
+        price: `$${detail?.amount || "0.00"}`,
+        icon: iconMap[typeLower] || star,
+        subscriptionId: subscription.id,
+        details: subscription.details,
+        best: index === 1, // Mark middle plan as best value
+      };
+    });
+  };
   useEffect(() => {
-    //call subscription API to get the current subscription status and update the UI accordingly
     const fetchSubscription = async () => {
       try {
         const data = await subscriptionList();
         console.log("Subscription data:", data);
-        setSubscriptionData(data);
-        // Update UI based on subscription status if needed
+        setSubscriptionDataList(data);
+        const transformedPlans = transformSubscriptionsToPlans(data);
+        setPlans(transformedPlans);
       } catch (error: any) {
         console.error("Error fetching subscription data:", error.message);
       }
     };
 
     fetchSubscription();
-  },[]);
+  }, []);
 
-  const handleSubscribe = (planId: PlanId) => {
-    alert(`Subscribed to ${planId}`);
+  const handleSubscribe = (planId: string | number, planName: string) => {
+    history.push("/tagging");
   };
 
-  const scrollToPlan = async (planId: PlanId) => {
+  const scrollToPlan = async (planId: string | number) => {
     const el = planRefs.current[planId];
     const content = contentRef.current;
     if (!el || !content || typeof content.scrollToPoint !== "function") return;
@@ -67,7 +94,7 @@ const Subscription: React.FC = () => {
     await content.scrollToPoint(0, y, 350);
   };
 
-  const handlePlanClick = (planId: PlanId) => {
+  const handlePlanClick = (planId: string | number) => {
     const next = selectedPlan === planId ? null : planId;
     setSelectedPlan(next);
 
@@ -78,33 +105,39 @@ const Subscription: React.FC = () => {
     }
   };
 
-  const renderDetails = (planId: PlanId) => {
-    switch (planId) {
-      case "basic":
-        return (
-          <>
-            <li>Limited features</li>
-            <li>Email support</li>
-            <li>Ideal for individuals</li>
-          </>
-        );
-      case "standard":
-        return (
-          <>
-            <li>All Basic features</li>
-            <li>Priority support</li>
-            <li>Best value for most users</li>
-          </>
-        );
-      case "premium":
-        return (
-          <>
-            <li>All Standard features</li>
-            <li>24/7 premium support</li>
-            <li>Advanced analytics</li>
-          </>
-        );
+  const renderDetailsTable = (plan: Plan) => {
+    if (!plan.details || plan.details.length === 0) {
+      return <p>No details available</p>;
     }
+
+    return (
+      <div className="details-table-wrap">
+        <table className="details-table">
+          <thead>
+            <tr>
+              <th>Detail ID</th>
+              <th>Amount</th>
+              <th>Billing Period</th>
+              <th>Monthly</th>
+              <th>Yearly</th>
+              <th>Created At</th>
+            </tr>
+          </thead>
+          <tbody>
+            {plan.details.map((detail) => (
+              <tr key={detail.id}>
+                <td>{detail.id}</td>
+                <td>${detail.amount}</td>
+                <td>{detail.monthly ? "Monthly" : ""} {detail.yearly ? "Yearly" : ""}</td>
+                <td>{detail.monthly ? "✓" : "✗"}</td>
+                <td>{detail.yearly ? "✓" : "✗"}</td>
+                <td>{new Date(detail.created_at).toLocaleDateString()}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    );
   };
 
   return (
@@ -116,9 +149,9 @@ const Subscription: React.FC = () => {
             <p className="subscription-subtitle">
               Choose the plan that fits you best
             </p>
-            {subscriptionData && (
+            {subscriptionDataList.length > 0 && (
               <p className="current-subscription">
-                Current Subscription: {subscriptionData.currentPlan || 'None'}
+                Available Plans: {subscriptionDataList.length}
               </p>
             )}
           </div>
@@ -151,7 +184,7 @@ const Subscription: React.FC = () => {
                     className="subscribe-btn"
                     onClick={(e) => {
                       e.stopPropagation();
-                      handleSubscribe(plan.id);
+                      handleSubscribe(plan.id, plan.name);
                     }}
                   >
                     Subscribe
@@ -177,12 +210,13 @@ const Subscription: React.FC = () => {
                         {plan.name} Plan Details
                       </h3>
 
-                      <ul className="details-list">{renderDetails(plan.id)}</ul>
+                      <h4 className="pricing-details-heading">Pricing & Billing Options</h4>
+                      {renderDetailsTable(plan)}
 
                       <IonButton
                         expand="block"
                         className="details-subscribe-btn"
-                        onClick={() => handleSubscribe(plan.id)}
+                        onClick={() => handleSubscribe(plan.id, plan.name)}
                       >
                         Subscribe
                       </IonButton>

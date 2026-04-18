@@ -10,10 +10,6 @@ import { IonToast } from "@ionic/react";
 import { registerUser } from "../service/AuthicationService";
 import { useHistory } from "react-router-dom";
 import { useGoogleLogin } from "@react-oauth/google";
-import {
-  AppleButton,
-  appleAuth,
-} from '@invertase/react-native-apple-authentication';
 
 
 const Registration: React.FC = () => {

@@ -52,6 +52,7 @@ import Notification from './pages/Notification';
 import Subscription from './pages/subscription';
 import Location from './pages/Location';
 import NotFound from './pages/NotFound';
+import Tagging from './pages/Tagging';
 
 setupIonicReact();
 
@@ -88,6 +89,9 @@ const App: React.FC = () => (
           </Route>
           <Route exact path="/home">
             <Home />
+          </Route>
+          <Route exact path="/tagging">
+            <Tagging />
           </Route>
           <Route exact path="/profile">
             <Profile />

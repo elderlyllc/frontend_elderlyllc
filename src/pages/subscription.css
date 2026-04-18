@@ -165,38 +165,6 @@
   color: #1f2528;
 }
 
-.details-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.details-list li {
-  position: relative;
-  padding-left: 28px;
-  margin-bottom: 12px;
-  font-size: 15px;
-  color: #2d3336;
-  line-height: 1.4;
-}
-
-.details-list li::before {
-  content: '✓';
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  background: #e7f5f2;
-  color: #2f8a83;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 12px;
-  font-weight: 700;
-}
-
 .details-subscribe-btn {
   margin-top: 18px;
   height: 46px;
@@ -223,6 +191,59 @@
   align-items: center;
   justify-content: center;
   cursor: pointer;
+}
+
+/* ========================= */
+/* DETAILS TABLE */
+/* ========================= */
+.details-table-wrap {
+  margin-top: 18px;
+  overflow-x: auto;
+}
+
+.details-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+  background: #fafbfb;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.details-table thead {
+  background: #eef7f5;
+}
+
+.details-table thead th {
+  padding: 12px 10px;
+  text-align: left;
+  font-weight: 700;
+  color: #2f8a83;
+  border-bottom: 2px solid #d4e6e2;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.details-table tbody td {
+  padding: 12px 10px;
+  color: #2d3336;
+  border-bottom: 1px solid #e9eceb;
+}
+
+.details-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.details-table tbody tr:hover {
+  background: #f5f9f8;
+}
+
+.pricing-details-heading {
+  margin: 18px 0 12px 0;
+  font-size: 16px;
+  font-weight: 700;
+  color: #1f2528;
 }
 
 @keyframes detailsFade {

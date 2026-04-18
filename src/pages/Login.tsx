@@ -74,14 +74,9 @@ const GoogleLogin = useGoogleLogin({
       <IonContent fullscreen className="ion-padding">
 
         {/* Login Section */}
-        <div style={{
-          background: "#fff",
-          padding: "20px",
-          borderRadius: "12px",
-          boxShadow: "0 2px 10px rgba(0,0,0,0.1)"
-        }}>
-          <h3 style={{ textAlign: "center" }}>Welcome Back!</h3>
-          <h4 style={{ textAlign: "center" }}>Sign In to your account</h4>
+        <div className="login-container">
+          <h3>Welcome Back!</h3>
+          <h4>Sign In to your account</h4>
           <IonToast
             isOpen={showToast}
             message={toastMessage}
@@ -91,111 +86,45 @@ const GoogleLogin = useGoogleLogin({
             color="danger"
           />
           <input
+            className="login-input"
             placeholder="Email"
-            style={{
-              width: "100%",
-              padding: "12px",
-              marginTop: "10px",
-              borderRadius: "8px",
-              border: "1px solid #ddd"
-            }}
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
 
           <input
+            className="login-input"
             type="password"
             placeholder="Password"
-            style={{
-              width: "100%",
-              padding: "12px",
-              marginTop: "10px",
-              borderRadius: "8px",
-              border: "1px solid #ddd"
-            }}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
-          <a href="/forget-password" style={{ color: "#f59e7d", textDecoration: "underline", textAlign: "center", display: "block", marginTop: "10px" }}>
+          <a href="/forget-password" className="login-forgot-link">
             Forgot Password
           </a>
-          <button style={{
-            width: "100%",
-            marginTop: "15px",
-            padding: "12px",
-            borderRadius: "8px",
-            background: "#f59e7d",
-            color: "#fff",
-            border: "none"
-          }}
-            onClick={submit}>
+          <button className="login-continue-btn" onClick={submit}>
             Continue
           </button>
-          <div style={{ textAlign: "center", marginTop: "15px" }}>
-            OR
-          </div>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              marginTop: "15px"
-            }}
-          >
+          <div className="login-divider">OR</div>
+          <div className="login-social-wrapper">
             <button
-              style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                gap: "10px",
-                width: "100%",
-                padding: "12px",
-                borderRadius: "8px",
-                border: "1px solid #ddd",
-                background: "#fff",
-                cursor: "pointer",
-                fontWeight: "500",
-                boxShadow: "0 1px 4px rgba(0,0,0,0.08)"
-              }}
+              className="login-social-btn"
               onClick={() => GoogleLogin()}
-             
             >
               <img
+                className="login-social-icon"
                 src="https://www.svgrepo.com/show/475656/google-color.svg"
                 alt="Google"
-                style={{ width: "20px", height: "20px" }}
               />
               Continue with Google
             </button>
-          </div>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              marginTop: "10px"
-            }}
-          >
-            <button
-              style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                gap: "10px",
-                width: "100%",
-                padding: "12px",
-                borderRadius: "8px",
-                border: "1px solid #ddd",
-                background: "#fff",
-                cursor: "pointer",
-                fontWeight: "500",
-                boxShadow: "0 1px 4px rgba(0,0,0,0.08)"
-              }}
-            >
-              <IonIcon icon={logoApple} style={{ fontSize: "20px" }} />
+            <button className="login-social-btn">
+              <IonIcon icon={logoApple} className="login-social-icon" />
               Continue with Apple
             </button>
           </div>
-          <div style={{ textAlign: "center", marginTop: "15px" }}>
-            Don't have an account? <a href="/registration" style={{ color: "#f59e7d", textDecoration: "underline" }}>Sign Up</a>
+          <div className="login-signup-section">
+            Don't have an account? <a href="/registration" className="login-signup-link">Sign Up</a>
           </div>
         </div>
 
