@@ -1,5 +1,5 @@
 import MainLayout from './layout/mainLayout';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { IonContent, IonIcon } from '@ionic/react';
 import {
   personOutline,
@@ -12,12 +12,19 @@ import {
   addOutline,
   notificationsOutline,
 } from 'ionicons/icons';
+import { useHistory } from "react-router-dom";
 
 const Tagging: React.FC = () => {
+   const history = useHistory();
   const [serviceFor, setServiceFor] = useState<'self' | 'other'>('self');
   const [medicalCondition, setMedicalCondition] = useState<'yes' | 'no'>('yes');
   const [preferredTime, setPreferredTime] = useState<'morning' | 'afternoon' | 'evening'>('morning');
-
+   useEffect(() => {
+      let token =  localStorage.getItem("token");
+      if(!token){
+        history.push("/login");
+      }
+    }, []);
   return (
     <MainLayout>
       <IonContent fullscreen className="elderly-general-page">

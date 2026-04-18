@@ -47,6 +47,12 @@ const Subscription: React.FC = () => {
     standard: star,
     premium: diamond,
   };
+   useEffect(() => {
+      let token =  localStorage.getItem("token");
+      if(!token){
+        history.push("/login");
+      }
+    }, []);
 
   // Transform API response to plan format
   const transformSubscriptionsToPlans = (data: ApiSubscriptionData[]): Plan[] => {
