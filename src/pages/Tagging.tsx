@@ -174,7 +174,11 @@ const Tagging: React.FC = () => {
                   </button>
                 </div>
 
-                <div className="condition-box" />
+                  <div className="input-box">
+                 
+                  <IonInput placeholder="Comments" className="custom-ion-input" />
+                </div>
+
               </div>
 
               <div className="divider" />
@@ -208,27 +212,7 @@ const Tagging: React.FC = () => {
             <button className="continue-btn">Continue</button>
           </main>
 
-          <footer className="bottom-nav">
-            <div className="nav-item">
-              <IonIcon icon={homeOutline} />
-              <span>Home</span>
-            </div>
-
-            <div className="nav-item">
-              <IonIcon icon={addOutline} />
-              <span>Our Services</span>
-            </div>
-
-            <div className="nav-item">
-              <IonIcon icon={notificationsOutline} />
-              <span>Notification</span>
-            </div>
-
-            <div className="nav-item active">
-              <IonIcon icon={personOutline} />
-              <span>Profile</span>
-            </div>
-          </footer>
+         
         </div>
       </IonContent>
     </MainLayout>
