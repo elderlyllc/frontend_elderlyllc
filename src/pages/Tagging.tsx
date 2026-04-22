@@ -32,9 +32,10 @@ const Tagging: React.FC = () => {
     "morning" | "afternoon" | "evening"
   >("morning");
 
-  useEffect(() => {
-    let token = localStorage.getItem("token");
-    if (!token) {
+  
+   useEffect(() => {
+    let cart_id = localStorage.getItem("cart_id");
+    if (!cart_id) {
       history.push("/login");
     }
   }, []);

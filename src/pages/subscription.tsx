@@ -1,8 +1,9 @@
 import React, { useRef, useState, useEffect } from "react";
-import { IonButton, IonContent, IonIcon, useIonRouter } from "@ionic/react";
+import { IonButton, IonContent, IonIcon } from "@ionic/react";
 import MainLayout from "./layout/mainLayout";
 import { leafOutline, star, diamond } from "ionicons/icons";
-import {subscriptionList}  from "../service/Subscription";
+import { subscriptionList } from "../service/Subscription";
+import { addCart } from "../service/Cart";
 import { useHistory } from "react-router-dom";
 
 interface SubscriptionDetail {
@@ -38,39 +39,42 @@ const Subscription: React.FC = () => {
   const [selectedPlan, setSelectedPlan] = useState<string | number | null>(null);
   const [subscriptionDataList, setSubscriptionDataList] = useState<ApiSubscriptionData[]>([]);
   const [plans, setPlans] = useState<Plan[]>([]);
+  const [loading, setLoading] = useState(false);
   const contentRef = useRef<any>(null);
   const planRefs = useRef<Record<string | number, HTMLDivElement | null>>({});
 
-  // Map subscription types to icons
   const iconMap: Record<string, string> = {
     basic: leafOutline,
     standard: star,
     premium: diamond,
   };
-   useEffect(() => {
-      let token =  localStorage.getItem("token");
-      if(!token){
-        history.push("/login");
-      }
-    }, []);
 
-  // Transform API response to plan format
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      history.push("/login");
+    }
+  }, [history]);
+
   const transformSubscriptionsToPlans = (data: ApiSubscriptionData[]): Plan[] => {
     return data.map((subscription, index) => {
-      const detail = subscription.details[0]; // Get first detail
+      const detail = subscription.details[0];
       const typeLower = subscription.subscription_type.toLowerCase();
-      
+
       return {
         id: subscription.id,
-        name: subscription.subscription_type.charAt(0).toUpperCase() + subscription.subscription_type.slice(1),
+        name:
+          subscription.subscription_type.charAt(0).toUpperCase() +
+          subscription.subscription_type.slice(1),
         price: `$${detail?.amount || "0.00"}`,
         icon: iconMap[typeLower] || star,
         subscriptionId: subscription.id,
         details: subscription.details,
-        best: index === 1, // Mark middle plan as best value
+        best: index === 1,
       };
     });
   };
+
   useEffect(() => {
     const fetchSubscription = async () => {
       try {
@@ -87,8 +91,61 @@ const Subscription: React.FC = () => {
     fetchSubscription();
   }, []);
 
-  const handleSubscribe = (planId: string | number, planName: string) => {
-    history.push("/tagging");
+  const handleSubscribe = async (planId: string | number, planName: string) => {
+    try {
+      setLoading(true);
+
+      const selectedPlanData = plans.find((plan) => plan.id === planId);
+
+      if (!selectedPlanData) {
+        throw new Error("Selected plan not found");
+      }
+
+      const firstDetail = selectedPlanData.details?.[0];
+
+      const userId = localStorage.getItem("user_id");
+
+      if (!userId) {
+        throw new Error("User ID not found. Please login again.");
+      }
+
+      const payload = {
+        customer_id: Number(userId),
+        createdBy: Number(userId),
+        subscription_id: selectedPlanData.subscriptionId,
+        subscription_value: firstDetail?.amount ? Number(firstDetail.amount) : 0,
+        isactive: true,
+        is_default: true,
+      };
+
+      console.log("Adding cart with payload:", payload);
+
+      const response = await addCart(payload);
+
+      console.log(`Subscribed to plan: ${planName} (ID: ${planId})`);
+      console.log("Cart created successfully:", response);
+
+      localStorage.setItem("selected_subscription_id", String(selectedPlanData.subscriptionId));
+      localStorage.setItem(
+        "selected_subscription_value",
+        String(firstDetail?.amount || 0)
+      );
+
+      if (response?.data?.id) {
+        localStorage.setItem("cart_id", String(response.data.id));
+      }
+
+      if (response?.data?.cardnumber) {
+        localStorage.setItem("card_number", response.data.cardnumber);
+      }
+
+      history.push("/tagging");
+    } catch (error: any) {
+      console.error("Error adding cart:", error.message);
+      alert(error.message || "Failed to add cart");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const scrollToPlan = async (planId: string | number) => {
@@ -134,7 +191,9 @@ const Subscription: React.FC = () => {
               <tr key={detail.id}>
                 <td>{detail.id}</td>
                 <td>${detail.amount}</td>
-                <td>{detail.monthly ? "Monthly" : ""} {detail.yearly ? "Yearly" : ""}</td>
+                <td>
+                  {detail.monthly ? "Monthly" : ""} {detail.yearly ? "Yearly" : ""}
+                </td>
                 <td>{detail.monthly ? "✓" : "✗"}</td>
                 <td>{detail.yearly ? "✓" : "✗"}</td>
                 <td>{new Date(detail.created_at).toLocaleDateString()}</td>
@@ -188,12 +247,13 @@ const Subscription: React.FC = () => {
 
                   <IonButton
                     className="subscribe-btn"
+                    disabled={loading}
                     onClick={(e) => {
                       e.stopPropagation();
                       handleSubscribe(plan.id, plan.name);
                     }}
                   >
-                    Subscribe
+                    {loading ? "Please wait..." : "Subscribe"}
                   </IonButton>
                 </div>
 
@@ -222,9 +282,10 @@ const Subscription: React.FC = () => {
                       <IonButton
                         expand="block"
                         className="details-subscribe-btn"
+                        disabled={loading}
                         onClick={() => handleSubscribe(plan.id, plan.name)}
                       >
-                        Subscribe
+                        {loading ? "Please wait..." : "Subscribe"}
                       </IonButton>
                     </div>
                   </div>
@@ -233,6 +294,7 @@ const Subscription: React.FC = () => {
             ))}
           </div>
         </div>
+
         <div className="skip-container">
           <IonButton className="skip-btn" onClick={() => console.log("skip")}>
             Skip

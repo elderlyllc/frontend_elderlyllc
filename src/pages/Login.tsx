@@ -44,6 +44,7 @@ const Login: React.FC = () => {
 
     console.log("Login successful:", data);
     localStorage.setItem("token", data.token);
+    localStorage.setItem("user_id",data.user_id);
     if(data.token){
        
      history.push("/subscription");
