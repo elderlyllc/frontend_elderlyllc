@@ -53,3 +53,23 @@ export const fetchCartDetails = async (id: number) => {
     );
   }
 };
+
+/**
+ * Update Cart Active Status
+ */
+export const updateCartStatus = async (id: number, isactive: boolean) => {
+  try {
+    const response = await api.patch(
+      apiEndpoints.updateCartStatus(id),
+      { isactive }
+    );
+
+    return response.data;
+  } catch (error: any) {
+    throw new Error(
+      error.response?.data?.message ||
+      error.response?.data?.error ||
+      "Failed to update cart status"
+    );
+  }
+};

@@ -50,6 +50,9 @@ const Tagging: React.FC = () => {
 
     return `${month}/${day}/${year}`;
   };
+  const submit = () =>{
+    
+  }
 
   return (
     <MainLayout>
@@ -210,7 +213,7 @@ const Tagging: React.FC = () => {
               </div>
             </section>
 
-            <button className="continue-btn">Continue</button>
+            <button  onClick={() => submit()} className="continue-btn">Continue</button>
           </main>
 
          

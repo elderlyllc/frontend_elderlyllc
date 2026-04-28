@@ -3,7 +3,7 @@ import { IonButton, IonContent, IonIcon } from "@ionic/react";
 import MainLayout from "./layout/mainLayout";
 import { leafOutline, star, diamond } from "ionicons/icons";
 import { subscriptionList } from "../service/Subscription";
-import { addCart } from "../service/Cart";
+import { addCart, fetchCart, updateCartStatus } from "../service/Cart";
 import { useHistory } from "react-router-dom";
 
 interface SubscriptionDetail {
@@ -91,62 +91,85 @@ const Subscription: React.FC = () => {
     fetchSubscription();
   }, []);
 
-  const handleSubscribe = async (planId: string | number, planName: string) => {
-    try {
-      setLoading(true);
+ const handleSubscribe = async (planId: string | number, planName: string) => {
+  try {
+    setLoading(true);
 
-      const selectedPlanData = plans.find((plan) => plan.id === planId);
+    const selectedPlanData = plans.find((plan) => plan.id === planId);
 
-      if (!selectedPlanData) {
-        throw new Error("Selected plan not found");
-      }
-
-      const firstDetail = selectedPlanData.details?.[0];
-
-      const userId = localStorage.getItem("user_id");
-
-      if (!userId) {
-        throw new Error("User ID not found. Please login again.");
-      }
-
-      const payload = {
-        customer_id: Number(userId),
-        createdBy: Number(userId),
-        subscription_id: selectedPlanData.subscriptionId,
-        subscription_value: firstDetail?.amount ? Number(firstDetail.amount) : 0,
-        isactive: true,
-        is_default: true,
-      };
-
-      console.log("Adding cart with payload:", payload);
-
-      const response = await addCart(payload);
-
-      console.log(`Subscribed to plan: ${planName} (ID: ${planId})`);
-      console.log("Cart created successfully:", response);
-
-      localStorage.setItem("selected_subscription_id", String(selectedPlanData.subscriptionId));
-      localStorage.setItem(
-        "selected_subscription_value",
-        String(firstDetail?.amount || 0)
-      );
-
-      if (response?.data?.id) {
-        localStorage.setItem("cart_id", String(response.data.id));
-      }
-
-      if (response?.data?.cardnumber) {
-        localStorage.setItem("card_number", response.data.cardnumber);
-      }
-
-      history.push("/tagging");
-    } catch (error: any) {
-      console.error("Error adding cart:", error.message);
-      alert(error.message || "Failed to add cart");
-    } finally {
-      setLoading(false);
+    if (!selectedPlanData) {
+      throw new Error("Selected plan not found");
     }
-  };
+
+    const firstDetail = selectedPlanData.details?.[0];
+
+    const userId = localStorage.getItem("user_id");
+
+    if (!userId) {
+      throw new Error("User ID not found. Please login again.");
+    }
+
+    /* 🔥 STEP 1: CHECK EXISTING CART */
+    const existingCarts = await fetchCart();
+    console.log("existingCarts?.data",existingCarts);
+    const activeCart = existingCarts?.find(
+      (cart: any) =>
+        cart.createdBy === Number(userId) && cart.isactive === true
+    );
+
+    /* 🔥 STEP 2: DEACTIVATE EXISTING CART */
+    if (activeCart) {
+      console.log("Deactivating existing cart:", activeCart.id);
+
+      await updateCartStatus(activeCart.id, false);
+    }
+
+    /* 🔥 STEP 3: CREATE NEW CART */
+    const payload = {
+      customer_id: Number(userId),
+      createdBy: Number(userId),
+      subscription_id: selectedPlanData.subscriptionId,
+      subscription_value: firstDetail?.amount
+        ? Number(firstDetail.amount)
+        : 0,
+      isactive: true,
+      is_default: true,
+    };
+
+    console.log("Adding cart with payload:", payload);
+
+    const response = await addCart(payload);
+
+    console.log(`Subscribed to plan: ${planName} (ID: ${planId})`);
+    console.log("Cart created successfully:", response);
+
+    /* 🔥 STORE DATA */
+    localStorage.setItem(
+      "selected_subscription_id",
+      String(selectedPlanData.subscriptionId)
+    );
+
+    localStorage.setItem(
+      "selected_subscription_value",
+      String(firstDetail?.amount || 0)
+    );
+
+    if (response?.data?.id) {
+      localStorage.setItem("cart_id", String(response.data.id));
+    }
+
+    if (response?.data?.cardnumber) {
+      localStorage.setItem("card_number", response.data.cardnumber);
+    }
+
+    history.push("/tagging");
+  } catch (error: any) {
+    console.error("Error adding cart:", error.message);
+    alert(error.message || "Failed to add cart");
+  } finally {
+    setLoading(false);
+  }
+};
 
   const scrollToPlan = async (planId: string | number) => {
     const el = planRefs.current[planId];

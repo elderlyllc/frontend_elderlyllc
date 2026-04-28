@@ -4,16 +4,21 @@ const serverRootURL = "http://3.16.158.243:8000";
 // Determine which API root URL to use based on the environment
 //const apiRootURL = process.env.NODE_ENV === 'development' ? apiLocalRootURL : serverRootURL;
 const apiRootURL = serverRootURL;
-
 const apiEndpoints = {
   login: `${apiRootURL}/api/login`,
   register: `${apiRootURL}/api/register`,
   forgetPassword: `${apiRootURL}/api/forget-password`,
+
   subscriptionList: `${apiRootURL}/api/subscriptions`,
+
+  // Cart APIs
   addtocart: `${apiRootURL}/api/add-cart`,
   getcart: `${apiRootURL}/api/carts`,
-  getCartDetails: (id) => `${apiRootURL}/api/cart-details/${id}`,
+  getCartDetails: (id: number) => `${apiRootURL}/api/cart-details/${id}`,
+  updateCartStatus: (id: number) => `${apiRootURL}/api/cart-status/${id}`,
+
   baseURL: apiRootURL,
 };
+
 
 export default apiEndpoints;
