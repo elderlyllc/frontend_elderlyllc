@@ -162,7 +162,7 @@ const Subscription: React.FC = () => {
       localStorage.setItem("card_number", response.data.cardnumber);
     }
 
-    history.push("/tagging");
+    history.push("/payment");
   } catch (error: any) {
     console.error("Error adding cart:", error.message);
     alert(error.message || "Failed to add cart");

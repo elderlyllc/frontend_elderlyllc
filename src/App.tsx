@@ -53,6 +53,7 @@ import Subscription from './pages/subscription';
 import Location from './pages/Location';
 import NotFound from './pages/NotFound';
 import Tagging from './pages/Tagging';
+import StripePaymentPage from './pages/StripePaymen';
 
 setupIonicReact();
 
@@ -92,6 +93,9 @@ const App: React.FC = () => (
           </Route>
           <Route exact path="/tagging">
             <Tagging />
+          </Route>
+            <Route exact path="/payment">
+            <StripePaymentPage />
           </Route>
           <Route exact path="/profile">
             <Profile />

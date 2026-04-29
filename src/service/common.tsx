@@ -17,6 +17,10 @@ const apiEndpoints = {
   getCartDetails: (id: number) => `${apiRootURL}/api/cart-details/${id}`,
   updateCartStatus: (id: number) => `${apiRootURL}/api/cart-status/${id}`,
 
+  //Payment APIs
+  createPaymentIntent: `${apiRootURL}/api/create-payment-intent`,
+   savePaymentStatus: `${apiRootURL}/api/payment/save-status`,
+
   baseURL: apiRootURL,
 };
 
