@@ -7,6 +7,7 @@ import {
   IonInput,
   IonModal,
   IonButton,
+  IonToast,
 } from "@ionic/react";
 import {
   personOutline,
@@ -15,9 +16,6 @@ import {
   chevronForwardOutline,
   checkmarkCircle,
   ellipseOutline,
-  homeOutline,
-  addOutline,
-  notificationsOutline,
 } from "ionicons/icons";
 import { useHistory } from "react-router-dom";
 
@@ -28,12 +26,15 @@ const Tagging: React.FC = () => {
   const [medicalCondition, setMedicalCondition] = useState<"yes" | "no">("yes");
   const [dob, setDob] = useState<string>("");
   const [isDateOpen, setIsDateOpen] = useState(false);
+  const [showToast, setShowToast] = useState(false);
+  const [toastMessage, setToastMessage] = useState("");
+  const [firstName, setfirstName] = useState("");
+  const [lastName, setlastName] = useState("");
   const [preferredTime, setPreferredTime] = useState<
     "morning" | "afternoon" | "evening"
   >("morning");
 
-  
-   useEffect(() => {
+  useEffect(() => {
     let cart_id = localStorage.getItem("cart_id");
     if (!cart_id) {
       history.push("/login");
@@ -50,13 +51,36 @@ const Tagging: React.FC = () => {
 
     return `${month}/${day}/${year}`;
   };
-  const submit = () =>{
+  const submit = async () => {
+    if (!firstName) {
+      setToastMessage("First Name is required");
+      setShowToast(true);
+      return;
+    }
+     if (!lastName) {
+      setToastMessage("Last Name is required");
+      setShowToast(true);
+      return;
+    }
+    if (!dob) {
+      setToastMessage("Date Of Birth is required");
+      setShowToast(true);
+      return;
+    }
     
-  }
+  };
 
   return (
     <MainLayout>
       <IonContent fullscreen className="elderly-general-page">
+        <IonToast
+          isOpen={showToast}
+          message={toastMessage}
+          onDidDismiss={() => setShowToast(false)}
+          duration={2000}
+          position="top"
+          color="danger"
+        />
         <div className="general-shell">
           <main className="content-wrap">
             <section className="hero-copy">
@@ -99,12 +123,23 @@ const Tagging: React.FC = () => {
               <div className="input-row">
                 <div className="input-box">
                   <IonIcon icon={personOutline} />
-                  <IonInput placeholder="First Name" className="custom-ion-input" />
+
+                  <IonInput
+                    value={firstName}
+                    onIonChange={(e) => setfirstName(e.detail.value!)}
+                    placeholder="First Name"
+                    className="custom-ion-input"
+                  />
                 </div>
 
                 <div className="input-box">
                   <IonIcon icon={personOutline} />
-                  <IonInput placeholder="Last Name" className="custom-ion-input" />
+                  <IonInput
+                    value={lastName}
+                    onIonChange={(e) => setlastName(e.detail.value!)}
+                    placeholder="Last Name"
+                    className="custom-ion-input"
+                  />
                 </div>
               </div>
 
@@ -124,34 +159,35 @@ const Tagging: React.FC = () => {
               </button>
 
               {/* ✅ DATE MODAL */}
-             <IonModal
-  isOpen={isDateOpen}
-  onDidDismiss={() => setIsDateOpen(false)}
-  initialBreakpoint={0.6}
-  breakpoints={[0, 0.6, 0.9]}
->
-  <IonContent className="date-modal-content">
-    
-    <div className="date-modal-header">
-      <h3>Select Date of Birth</h3>
-      <IonButton fill="clear" onClick={() => setIsDateOpen(false)}>
-        Close
-      </IonButton>
-    </div>
+              <IonModal
+                isOpen={isDateOpen}
+                onDidDismiss={() => setIsDateOpen(false)}
+                initialBreakpoint={0.6}
+                breakpoints={[0, 0.6, 0.9]}
+              >
+                <IonContent className="date-modal-content">
+                  <div className="date-modal-header">
+                    <h3>Select Date of Birth</h3>
+                    <IonButton
+                      fill="clear"
+                      onClick={() => setIsDateOpen(false)}
+                    >
+                      Close
+                    </IonButton>
+                  </div>
 
-    <IonDatetime
-      presentation="date"
-      value={dob}
-      max={new Date().toISOString().split("T")[0]}
-      onIonChange={(e) => {
-        const value = e.detail.value as string;
-        setDob(value);
-        setIsDateOpen(false);
-      }}
-    />
-
-  </IonContent>
-</IonModal>
+                  <IonDatetime
+                    presentation="date"
+                    value={dob}
+                    max={new Date().toISOString().split("T")[0]}
+                    onIonChange={(e) => {
+                      const value = e.detail.value as string;
+                      setDob(value);
+                      setIsDateOpen(false);
+                    }}
+                  />
+                </IonContent>
+              </IonModal>
             </section>
 
             <section className="section-card card-soft">
@@ -178,11 +214,12 @@ const Tagging: React.FC = () => {
                   </button>
                 </div>
 
-                  <div className="input-box">
-                 
-                  <IonInput placeholder="Comments" className="custom-ion-input" />
+                <div className="input-box">
+                  <IonInput
+                    placeholder="Comments"
+                    className="custom-ion-input"
+                  />
                 </div>
-
               </div>
 
               <div className="divider" />
@@ -213,10 +250,10 @@ const Tagging: React.FC = () => {
               </div>
             </section>
 
-            <button  onClick={() => submit()} className="continue-btn">Continue</button>
+            <button onClick={() => submit()} className="continue-btn">
+              Continue
+            </button>
           </main>
-
-         
         </div>
       </IonContent>
     </MainLayout>
