@@ -18,6 +18,8 @@ import {
   ellipseOutline,
 } from "ionicons/icons";
 import { useHistory } from "react-router-dom";
+import { updateUserDetails } from "../service/AuthicationService";
+import { saveCartDetails } from "../service/Cart";
 
 const Tagging: React.FC = () => {
   const history = useHistory();
@@ -30,6 +32,7 @@ const Tagging: React.FC = () => {
   const [toastMessage, setToastMessage] = useState("");
   const [firstName, setfirstName] = useState("");
   const [lastName, setlastName] = useState("");
+  const [comment, setComment] = useState("");
   const [preferredTime, setPreferredTime] = useState<
     "morning" | "afternoon" | "evening"
   >("morning");
@@ -57,7 +60,7 @@ const Tagging: React.FC = () => {
       setShowToast(true);
       return;
     }
-     if (!lastName) {
+    if (!lastName) {
       setToastMessage("Last Name is required");
       setShowToast(true);
       return;
@@ -67,7 +70,41 @@ const Tagging: React.FC = () => {
       setShowToast(true);
       return;
     }
-    
+    try {
+       const cartId = localStorage.getItem("cart_id");
+       const userId = localStorage.getItem("user_id");
+
+    if (!cartId || !userId) {
+      throw new Error("Session expired. Please login again.");
+    }
+      const data = await updateUserDetails(
+        Number(userId),
+        {
+          first_name: firstName,
+          last_name: lastName,
+          date_of_birth: dob,
+        },
+      );
+        const payload = {
+      cart_id: Number(cartId),
+      created_by: Number(userId),
+      service_for: serviceFor,
+      medical_issue: medicalCondition,
+      comment_for_medical_condition:
+        medicalCondition === "yes" ? comment : "",
+      card_state: preferredTime,
+      is_active: true,
+    };
+
+    console.log("Cart Details Payload:", payload);
+
+    await saveCartDetails(payload);
+
+    history.push("/dashboard");
+    } catch (error: any) {
+      setToastMessage(error.message);
+      setShowToast(true);
+    }
   };
 
   return (
@@ -218,6 +255,7 @@ const Tagging: React.FC = () => {
                   <IonInput
                     placeholder="Comments"
                     className="custom-ion-input"
+                    onIonChange={(e) => setComment(e.detail.value!)}
                   />
                 </div>
               </div>
@@ -249,6 +287,7 @@ const Tagging: React.FC = () => {
                 </button>
               </div>
             </section>
+            
 
             <button onClick={() => submit()} className="continue-btn">
               Continue

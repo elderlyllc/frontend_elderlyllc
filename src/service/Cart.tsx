@@ -73,3 +73,16 @@ export const updateCartStatus = async (id: number, isactive: boolean) => {
     );
   }
 };
+
+export const saveCartDetails = async (payload: any) => {
+  try {
+    const response = await api.post(apiEndpoints.saveCartDetails, payload);
+    return response.data;
+  } catch (error: any) {
+    throw new Error(
+      error.response?.data?.message ||
+      error.response?.data?.error ||
+      "Failed to save cart details"
+    );
+  }
+};
