@@ -20,6 +20,12 @@ import {
 import { useHistory } from "react-router-dom";
 import { updateUserDetails } from "../service/AuthicationService";
 import { saveCartDetails } from "../service/Cart";
+import { Geolocation } from "@capacitor/geolocation";
+import {
+  APIProvider,
+  Map,
+  Marker,
+} from "@vis.gl/react-google-maps";
 
 const Tagging: React.FC = () => {
   const history = useHistory();
@@ -33,6 +39,12 @@ const Tagging: React.FC = () => {
   const [firstName, setfirstName] = useState("");
   const [lastName, setlastName] = useState("");
   const [comment, setComment] = useState("");
+  const [location, setLocation] = useState({
+  lat: 17.385044,
+  lng: 78.486671,
+});
+
+const [address, setAddress] = useState("");
   const [preferredTime, setPreferredTime] = useState<
     "morning" | "afternoon" | "evening"
   >("morning");
@@ -43,6 +55,7 @@ const Tagging: React.FC = () => {
       history.push("/login");
     }
   }, []);
+  
 
   const formatDate = (value: string) => {
     if (!value) return "MM/DD/YYYY";
@@ -106,6 +119,26 @@ const Tagging: React.FC = () => {
       setShowToast(true);
     }
   };
+
+  const getCurrentLocation = async () => {
+  try {
+    const permission = await Geolocation.requestPermissions();
+
+    if (permission.location !== "granted") {
+      alert("Location permission denied");
+      return;
+    }
+
+    const position = await Geolocation.getCurrentPosition();
+
+    setLocation({
+      lat: position.coords.latitude,
+      lng: position.coords.longitude,
+    });
+  } catch (error) {
+    alert("Unable to get current location");
+  }
+};
 
   return (
     <MainLayout>
@@ -287,6 +320,40 @@ const Tagging: React.FC = () => {
                 </button>
               </div>
             </section>
+            <section className="section-card card-soft location-card">
+  <h2>Where do you need the service?</h2>
+
+  <div className="google-map-box">
+    <APIProvider apiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY}>
+      <Map
+        defaultZoom={14}
+        center={location}
+        mapId="elderly-location-map"
+        gestureHandling="greedy"
+        disableDefaultUI={true}
+      >
+        <Marker position={location} />
+      </Map>
+    </APIProvider>
+  </div>
+
+  <button
+    type="button"
+    className="location-btn"
+    onClick={getCurrentLocation}
+  >
+    Use Current Location
+  </button>
+
+  <div className="input-box full-width location-input">
+    <IonInput
+      value={address}
+      placeholder="Enter address manually"
+      className="custom-ion-input"
+      onIonChange={(e) => setAddress(e.detail.value || "")}
+    />
+  </div>
+</section>
             
 
             <button onClick={() => submit()} className="continue-btn">

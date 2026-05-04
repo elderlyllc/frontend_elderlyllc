@@ -1593,3 +1593,28 @@ footer .icon-box span {
 ion-datetime {
   padding: 10px 12px 20px;
 }
+
+.google-map-box {
+  width: 100%;
+  height: 180px;
+  border-radius: 22px;
+  overflow: hidden;
+  border: 1.5px solid #c9d8ee;
+  margin-bottom: 14px;
+}
+
+.location-btn {
+  width: 100%;
+  height: 52px;
+  border-radius: 16px;
+  border: 1.5px solid #86b5ec;
+  background: #dcecff;
+  color: #2468b5;
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+.location-input {
+  margin-top: 0;
+}
