@@ -1,5 +1,4 @@
-import MainLayout from './layout/mainLayout';
-import React from 'react';
+import MainLayout from './layout/mainLayout'; 
 import {
   IonPage,
   IonContent,
@@ -8,34 +7,56 @@ import {
   IonAvatar,
 } from '@ionic/react';
 import {
-  cameraOutline,
-  star,
-  walletOutline,
   calendarOutline,
   heartOutline,
   headsetOutline,
   giftOutline,
   chevronForwardOutline,
-  mailOutline,
   peopleOutline,
   settingsOutline,
   ticketOutline,
 } from 'ionicons/icons';
+import React, { useEffect, useState } from "react";
+import {getProfile}  from "../service/AuthicationService";
+
 
 const overviewItems = [
-  { icon: walletOutline, title: 'Wallet', subtitle: '$45.00' },
+  // { icon: walletOutline, title: 'Wallet', subtitle: '$45.00' },
   { icon: calendarOutline, title: 'History', subtitle: '31 Trips' },
   { icon: heartOutline, title: 'Saved\nServices', subtitle: '' },
   { icon: headsetOutline, title: 'Support', subtitle: 'Contact Us' },
 ];
 
 const menuItems = [
-  { icon: mailOutline, label: 'Messages' },
+  // { icon: mailOutline, label: 'Messages' },
   { icon: peopleOutline, label: 'Family Accounts' },
   { icon: settingsOutline, label: 'Settings' },
 ];
 
+ 
+
+
 const Profile: React.FC = () => {
+  const [profile, setProfile] = useState<any>(null);
+  useEffect(() => {
+  const fetchProfile = async () => {
+    try {
+      const userId = localStorage.getItem("user_id");
+
+      if (!userId) return;
+
+      const response = await getProfile(Number(userId));
+       setProfile(response.data);
+
+      console.log("Profile:", response.data);
+    } catch (error: any) {
+      alert(error.message);
+    }
+  };
+
+  fetchProfile();
+}, []);
+
   return (
       <MainLayout>
       <IonContent fullscreen className="elderly-profile-page">
@@ -50,17 +71,17 @@ const Profile: React.FC = () => {
                   </IonAvatar>
 
                   <div className="profile-copy">
-                    <h1>Samarth Reddy</h1>
-
+                    <h1>{profile?.first_name  } {profile?.last_name  }</h1>
+{/* 
                     <div className="status-row">
                       <span className="pill rating-pill">
                         <IonIcon icon={star} />
                         4.91
                       </span>
                       <span className="pill muted-pill">Not verified</span>
-                    </div>
+                    </div> */}
 
-                    <p className="email">samarthreddy@email.com</p>
+                    <p className="email"> {profile?.email || ""}</p>
                   </div>
                 </div>
               </div>

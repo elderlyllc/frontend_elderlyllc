@@ -24,6 +24,9 @@ const apiEndpoints = {
   updateUserDetails: (id: number) => `${apiRootURL}/api/user/${id}/details`,
   saveCartDetails: `${apiRootURL}/api/cart-details/save`,
 
+  //Profile APIs
+  getProfile: (id: number) => `${apiRootURL}/api/user/${id}`,
+
   baseURL: apiRootURL,
 };
 

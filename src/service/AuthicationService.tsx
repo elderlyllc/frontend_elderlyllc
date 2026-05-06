@@ -45,3 +45,16 @@ export const updateUserDetails = async (id: number, payload: any) => {
     );
   }
 };
+
+export const getProfile = async (id: number) => {
+  try {
+    const response = await api.get(apiEndpoints.getProfile(id));
+    return response.data;
+  } catch (error: any) {
+    throw new Error(
+      error.response?.data?.message ||
+        error.response?.data?.error ||
+        "Failed to fetch profile"
+    );
+  }
+};
