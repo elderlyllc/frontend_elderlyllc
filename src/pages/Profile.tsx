@@ -1,11 +1,10 @@
-import MainLayout from './layout/mainLayout'; 
+import MainLayout from "./layout/mainLayout";
 import {
-  IonPage,
   IonContent,
   IonButton,
   IonIcon,
   IonAvatar,
-} from '@ionic/react';
+} from "@ionic/react";
 import {
   calendarOutline,
   heartOutline,
@@ -15,53 +14,72 @@ import {
   peopleOutline,
   settingsOutline,
   ticketOutline,
-} from 'ionicons/icons';
+} from "ionicons/icons";
 import React, { useEffect, useState } from "react";
-import {getProfile}  from "../service/AuthicationService";
-
+import { getProfile } from "../service/AuthicationService";
+import { useHistory } from "react-router-dom";
 
 const overviewItems = [
-  // { icon: walletOutline, title: 'Wallet', subtitle: '$45.00' },
-  { icon: calendarOutline, title: 'History', subtitle: '31 Trips' },
-  { icon: heartOutline, title: 'Saved\nServices', subtitle: '' },
-  { icon: headsetOutline, title: 'Support', subtitle: 'Contact Us' },
+  {
+    icon: calendarOutline,
+    title: "History",
+    subtitle: "31 Trips",
+    route: "/history",
+  },
+  {
+    icon: heartOutline,
+    title: "Saved\nServices",
+    subtitle: "",
+    route: "/saved-services",
+  },
+  {
+    icon: headsetOutline,
+    title: "Support",
+    subtitle: "Contact Us",
+    route: "/support",
+  },
 ];
 
 const menuItems = [
-  // { icon: mailOutline, label: 'Messages' },
-  { icon: peopleOutline, label: 'Family Accounts' },
-  { icon: settingsOutline, label: 'Settings' },
+  {
+    icon: peopleOutline,
+    label: "Family Accounts",
+    route: "/family-accounts",
+  },
+  {
+    icon: settingsOutline,
+    label: "Settings",
+    route: "/settings",
+  },
 ];
 
- 
-
-
 const Profile: React.FC = () => {
+  const history = useHistory();
   const [profile, setProfile] = useState<any>(null);
+
   useEffect(() => {
-  const fetchProfile = async () => {
-    try {
-      const userId = localStorage.getItem("user_id");
+    const fetchProfile = async () => {
+      try {
+        const userId = localStorage.getItem("user_id");
 
-      if (!userId) return;
+        if (!userId) return;
 
-      const response = await getProfile(Number(userId));
-       setProfile(response.data);
+        const response = await getProfile(Number(userId));
+        setProfile(response.data);
 
-      console.log("Profile:", response.data);
-    } catch (error: any) {
-      alert(error.message);
-    }
-  };
+        console.log("Profile:", response.data);
+      } catch (error: any) {
+        alert(error.message);
+      }
+    };
 
-  fetchProfile();
-}, []);
+    fetchProfile();
+  }, []);
 
   return (
-      <MainLayout>
+    <MainLayout>
       <IonContent fullscreen className="elderly-profile-page">
         <div className="page-shell">
-        
           <main className="content-wrap">
             <section className="section-block">
               <div className="profile-card card-soft">
@@ -71,17 +89,11 @@ const Profile: React.FC = () => {
                   </IonAvatar>
 
                   <div className="profile-copy">
-                    <h1>{profile?.first_name  } {profile?.last_name  }</h1>
-{/* 
-                    <div className="status-row">
-                      <span className="pill rating-pill">
-                        <IonIcon icon={star} />
-                        4.91
-                      </span>
-                      <span className="pill muted-pill">Not verified</span>
-                    </div> */}
+                    <h1>
+                      {profile?.first_name || ""} {profile?.last_name || ""}
+                    </h1>
 
-                    <p className="email"> {profile?.email || ""}</p>
+                    <p className="email">{profile?.email || ""}</p>
                   </div>
                 </div>
               </div>
@@ -92,10 +104,14 @@ const Profile: React.FC = () => {
 
               <div className="overview-grid">
                 {overviewItems.map((item) => (
-                  <div className="overview-card card-soft" key={item.title}>
+                  <div
+                    className="overview-card card-soft"
+                    key={item.title}
+                    onClick={() => history.push(item.route)}
+                  >
                     <IonIcon icon={item.icon} className="overview-icon" />
                     <h3>
-                      {item.title.split('\n').map((line) => (
+                      {item.title.split("\n").map((line) => (
                         <span key={line}>
                           {line}
                           <br />
@@ -151,7 +167,12 @@ const Profile: React.FC = () => {
 
           <section className="menu-list card-panel">
             {menuItems.map((item) => (
-              <button key={item.label} className="menu-row" type="button">
+              <button
+                key={item.label}
+                className="menu-row"
+                type="button"
+                onClick={() => history.push(item.route)}
+              >
                 <div className="menu-left">
                   <IonIcon icon={item.icon} />
                   <span>{item.label}</span>
@@ -161,11 +182,9 @@ const Profile: React.FC = () => {
             ))}
           </section>
         </div>
-
       </IonContent>
     </MainLayout>
   );
 };
 
 export default Profile;
-

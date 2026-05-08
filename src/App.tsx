@@ -54,6 +54,7 @@ import Location from './pages/Location';
 import NotFound from './pages/NotFound';
 import Tagging from './pages/Tagging';
 import StripePaymentPage from './pages/StripePaymen';
+import History from './pages/History';
 
 setupIonicReact();
 
@@ -99,6 +100,9 @@ const App: React.FC = () => (
           </Route>
           <Route exact path="/profile">
             <Profile />
+          </Route>
+            <Route exact path="/history">
+            <History />
           </Route>
           <Route path="/more">
             <Home />
