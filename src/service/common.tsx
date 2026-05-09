@@ -27,6 +27,14 @@ const apiEndpoints = {
   //Profile APIs
   getProfile: (id: number) => `${apiRootURL}/api/user/${id}`,
 
+  //Notification APIs
+getNotifications: (userId: number) => `${apiRootURL}/api/notifications/${userId}`,
+createNotification: `${apiRootURL}/api/notifications`,
+markNotificationRead: (id: number) => `${apiRootURL}/api/notifications/read/${id}`,
+markAllNotificationsRead: (userId: number) =>
+  `${apiRootURL}/api/notifications/read-all/${userId}`,
+deleteNotification: (id: number) => `${apiRootURL}/api/notifications/${id}`,
+
   baseURL: apiRootURL,
 };
 

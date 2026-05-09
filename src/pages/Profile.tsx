@@ -14,6 +14,7 @@ import {
   peopleOutline,
   settingsOutline,
   ticketOutline,
+  logOutOutline,
 } from "ionicons/icons";
 import React, { useEffect, useState } from "react";
 import { getProfile } from "../service/AuthicationService";
@@ -51,6 +52,10 @@ const menuItems = [
     label: "Settings",
     route: "/settings",
   },
+  {
+    icon: logOutOutline,
+    label: "Logout",
+  },
 ];
 
 const Profile: React.FC = () => {
@@ -65,6 +70,7 @@ const Profile: React.FC = () => {
         if (!userId) return;
 
         const response = await getProfile(Number(userId));
+
         setProfile(response.data);
 
         console.log("Profile:", response.data);
@@ -76,11 +82,18 @@ const Profile: React.FC = () => {
     fetchProfile();
   }, []);
 
+  const handleLogout = () => {
+    localStorage.clear();
+
+    history.replace("/login");
+  };
+
   return (
     <MainLayout>
       <IonContent fullscreen className="elderly-profile-page">
         <div className="page-shell">
           <main className="content-wrap">
+            {/* PROFILE CARD */}
             <section className="section-block">
               <div className="profile-card card-soft">
                 <div className="profile-main">
@@ -90,15 +103,19 @@ const Profile: React.FC = () => {
 
                   <div className="profile-copy">
                     <h1>
-                      {profile?.first_name || ""} {profile?.last_name || ""}
+                      {profile?.first_name || ""}{" "}
+                      {profile?.last_name || ""}
                     </h1>
 
-                    <p className="email">{profile?.email || ""}</p>
+                    <p className="email">
+                      {profile?.email || ""}
+                    </p>
                   </div>
                 </div>
               </div>
             </section>
 
+            {/* OVERVIEW */}
             <section className="section-block">
               <h2 className="section-title">Overview</h2>
 
@@ -109,7 +126,11 @@ const Profile: React.FC = () => {
                     key={item.title}
                     onClick={() => history.push(item.route)}
                   >
-                    <IonIcon icon={item.icon} className="overview-icon" />
+                    <IonIcon
+                      icon={item.icon}
+                      className="overview-icon"
+                    />
+
                     <h3>
                       {item.title.split("\n").map((line) => (
                         <span key={line}>
@@ -118,19 +139,25 @@ const Profile: React.FC = () => {
                         </span>
                       ))}
                     </h3>
-                    {item.subtitle ? <p>{item.subtitle}</p> : null}
+
+                    {item.subtitle ? (
+                      <p>{item.subtitle}</p>
+                    ) : null}
                   </div>
                 ))}
               </div>
             </section>
 
+            {/* REWARDS CARD */}
             <section className="promo-card card-soft rewards-card">
               <div className="promo-left">
                 <div className="promo-icon-wrap gift">
                   <IonIcon icon={giftOutline} />
                 </div>
+
                 <div>
                   <h3>Earn Rewards</h3>
+
                   <p>
                     Refer friends to the Elderly app
                     <br />
@@ -139,18 +166,24 @@ const Profile: React.FC = () => {
                 </div>
               </div>
 
-              <IonButton className="promo-btn">Refer Friends</IonButton>
+              <IonButton className="promo-btn">
+                Refer Friends
+              </IonButton>
+
               <div className="wave wave-left" />
               <div className="wave wave-right" />
             </section>
 
+            {/* DISCOUNT CARD */}
             <section className="promo-card card-soft discount-card">
               <div className="promo-left">
                 <div className="promo-icon-wrap ticket-wrap">
                   <IonIcon icon={ticketOutline} />
                 </div>
+
                 <div>
                   <h3>Special Discount</h3>
+
                   <p>
                     Get 5% off your next ride within the city.
                     <br />
@@ -160,24 +193,37 @@ const Profile: React.FC = () => {
               </div>
 
               <div className="discount-badge">%</div>
+
               <div className="wave wave-left" />
               <div className="wave wave-right" />
             </section>
           </main>
 
+          {/* MENU */}
           <section className="menu-list card-panel">
             {menuItems.map((item) => (
               <button
                 key={item.label}
                 className="menu-row"
                 type="button"
-                onClick={() => history.push(item.route)}
+                onClick={() => {
+                  if (item.label === "Logout") {
+                    handleLogout();
+                  } else if (item.route) {
+                    history.push(item.route);
+                  }
+                }}
               >
                 <div className="menu-left">
                   <IonIcon icon={item.icon} />
+
                   <span>{item.label}</span>
                 </div>
-                <IonIcon icon={chevronForwardOutline} className="menu-arrow" />
+
+                <IonIcon
+                  icon={chevronForwardOutline}
+                  className="menu-arrow"
+                />
               </button>
             ))}
           </section>
