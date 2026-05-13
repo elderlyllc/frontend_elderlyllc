@@ -58,3 +58,18 @@ export const getProfile = async (id: number) => {
     );
   }
 };
+
+
+
+export const sendOtp = async (email: string) => {
+  try {
+    const response = await api.post(apiEndpoints.sendOtp, { email });
+    return response.data;
+  } catch (error: any) {
+    throw new Error(
+      error.response?.data?.message ||
+      error.response?.data?.error ||
+      "Failed to send OTP"
+    );
+  }
+};

@@ -1,17 +1,12 @@
-import {
-  IonContent,
-  IonIcon
-} from "@ionic/react";
+import { IonContent, IonIcon } from "@ionic/react";
 
 import MainLayout from "./layout/mainLayout";
 import { logoApple } from "ionicons/icons";
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { IonToast } from "@ionic/react";
-import {loginUser}  from "../service/AuthicationService";
+import { loginUser,sendOtp  } from "../service/AuthicationService";
 import { useHistory } from "react-router-dom";
 import { useGoogleLogin } from "@react-oauth/google";
-
-
 
 const Login: React.FC = () => {
   const history = useHistory();
@@ -21,59 +16,70 @@ const Login: React.FC = () => {
   const [toastMessage, setToastMessage] = useState("");
 
   useEffect(() => {
-  let token =  localStorage.getItem("token");
-  if(token){
-    history.push("/dashboard");
-  }
-}, []);
+    let token = localStorage.getItem("token");
+    if (token) {
+      history.push("/dashboard");
+    }
+  }, []);
   const submit = async () => {
-  if (!email) {
-    setToastMessage("Email is required");
-    setShowToast(true);
-    return;
-  }
-
-  if (!password) {
-    setToastMessage("Password is required");
-    setShowToast(true);
-    return;
-  }
-
-  try {
-    const data = await loginUser(email, password);
-
-    console.log("Login successful:", data);
-    localStorage.setItem("token", data.token);
-    localStorage.setItem("user_id",data.user_id);
-    if(data.token){
-       
-     history.push("/subscription");
+    if (!email) {
+      setToastMessage("Email is required");
+      setShowToast(true);
+      return;
     }
 
-  } catch (error: any) {
-    console.log("Login failed:", error);
-    const errorMessage = error.response?.data?.error || error.response?.data?.message || error.message || "Login failed";
-    setToastMessage(errorMessage);
-    setShowToast(true);
-  }
+    if (!password) {
+      setToastMessage("Password is required");
+      setShowToast(true);
+      return;
+    }
 
-  // console.log("Email:", email);
-  // console.log("Password:", password);
-};
-const GoogleLogin = useGoogleLogin({
+    try {
+       const response = await sendOtp(email);
+
+       return;
+      const data = await loginUser(email, password);
+       
+
+      console.log("Login successful:", data);
+      localStorage.setItem("token", data.token);
+      localStorage.setItem("user_id", data.user_id);
+      localStorage.setItem("role_id", data.user.role_id);
+      if (data.token) {
+        if (Number(data.user.role_id) === 2) {
+          history.push("/providerdashboard");
+        } else {
+          history.push("/subscription"); // your existing customer flow
+        }
+
+        // history.push("/subscription");
+      }
+    } catch (error: any) {
+      console.log("Login failed:", error);
+      const errorMessage =
+        error.response?.data?.error ||
+        error.response?.data?.message ||
+        error.message ||
+        "Login failed";
+      setToastMessage(errorMessage);
+      setShowToast(true);
+    }
+
+    // console.log("Email:", email);
+    // console.log("Password:", password);
+  };
+  const GoogleLogin = useGoogleLogin({
     onSuccess: (tokenResponse) => {
       console.log("Login Success:", tokenResponse);
     },
     onError: () => {
       console.log("Login Failed");
-    }
+    },
   });
-
 
   return (
     <MainLayout>
       <IonContent fullscreen className="ion-padding">
-
         {/* Login Section */}
         <div className="login-container">
           <h3>Welcome Back!</h3>
@@ -108,10 +114,7 @@ const GoogleLogin = useGoogleLogin({
           </button>
           <div className="login-divider">OR</div>
           <div className="login-social-wrapper">
-            <button
-              className="login-social-btn"
-              onClick={() => GoogleLogin()}
-            >
+            <button className="login-social-btn" onClick={() => GoogleLogin()}>
               <img
                 className="login-social-icon"
                 src="https://www.svgrepo.com/show/475656/google-color.svg"
@@ -125,10 +128,12 @@ const GoogleLogin = useGoogleLogin({
             </button>
           </div>
           <div className="login-signup-section">
-            Don't have an account? <a href="/registration" className="login-signup-link">Sign Up</a>
+            Don't have an account?{" "}
+            <a href="/registration" className="login-signup-link">
+              Sign Up
+            </a>
           </div>
         </div>
-
       </IonContent>
     </MainLayout>
   );
