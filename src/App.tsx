@@ -44,6 +44,8 @@ import '@ionic/react/css/palettes/dark.system.css';
 import './theme/variables.css';
 import Profile from './pages/Profile';
 import Login from './pages/Login';
+import Welcome from './pages/Welcome';
+import ServiceLogin from './pages/ServiceLogin';
 import Home from './pages/Home';
 import Registration from './pages/Registration';
 import ForgetPassword from './pages/ForgetPasswod';
@@ -65,8 +67,14 @@ const App: React.FC = () => (
      
         <IonRouterOutlet>
         <Switch>
+          <Route exact path="/welcome">
+            <Welcome />
+          </Route>
           <Route exact path="/login">
             <Login />
+          </Route>
+          <Route exact path="/service-login">
+            <ServiceLogin />
           </Route>
           <Route exact path="/registration">
             <Registration />
@@ -108,7 +116,7 @@ const App: React.FC = () => (
             <Home />
           </Route>
           <Route exact path="/">
-            <Redirect to="/login" />
+            <Redirect to="/welcome" />
           </Route>
           <Route>
             <NotFound />

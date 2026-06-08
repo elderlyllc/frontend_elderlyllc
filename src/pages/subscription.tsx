@@ -40,8 +40,11 @@ const Subscription: React.FC = () => {
   const [subscriptionDataList, setSubscriptionDataList] = useState<ApiSubscriptionData[]>([]);
   const [plans, setPlans] = useState<Plan[]>([]);
   const [loading, setLoading] = useState(false);
+  const [activeSubscriptionId, setActiveSubscriptionId] = useState<number | null>(null);
+  const [activeCart, setActiveCart] = useState<any>(null);
   const contentRef = useRef<any>(null);
   const planRefs = useRef<Record<string | number, HTMLDivElement | null>>({});
+  const [selectedSubscriptionId, setSelectedSubscriptionId] = useState<string | number | null>(null);
 
   const iconMap: Record<string, string> = {
     basic: leafOutline,
@@ -83,13 +86,27 @@ const Subscription: React.FC = () => {
         setSubscriptionDataList(data);
         const transformedPlans = transformSubscriptionsToPlans(data);
         setPlans(transformedPlans);
+
+        const userId = localStorage.getItem("user_id");
+        if (userId) {
+          const carts = await fetchCart();
+          const active = carts?.find(
+            (cart: any) => cart.createdBy === Number(userId) && cart.isactive === true
+          );
+          if (active) {
+            setActiveSubscriptionId(active.subscription_id);
+            setActiveCart(active);
+            history.push("/dashboard");
+            return;
+          }
+        }
       } catch (error: any) {
         console.error("Error fetching subscription data:", error.message);
       }
     };
 
     fetchSubscription();
-  }, []);
+  }, [history]);
 
  const handleSubscribe = async (planId: string | number, planName: string) => {
   try {
@@ -111,6 +128,14 @@ const Subscription: React.FC = () => {
 
     /* 🔥 STEP 1: CHECK EXISTING CART */
     const existingCarts = await fetchCart();
+    const existingActiveCart = existingCarts?.find(
+      (cart: any) => cart.createdBy === Number(userId) && cart.isactive === true
+    );
+
+    if (existingActiveCart && existingActiveCart.subscription_id === selectedPlanData.subscriptionId) {
+      history.push("/dashboard");
+      return;
+    }
     console.log("existingCarts?.data",existingCarts);
     const activeCart = existingCarts?.find(
       (cart: any) =>

@@ -35,9 +35,9 @@ const Login: React.FC = () => {
     }
 
     try {
-       const response = await sendOtp(email);
+       //const response = await sendOtp(email);
 
-       return;
+      // return;
       const data = await loginUser(email, password);
        
 

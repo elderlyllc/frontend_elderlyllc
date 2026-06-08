@@ -1,0 +1,278 @@
+.welcome-content {
+  --background: #eef8f7;
+}
+
+.welcome-screen {
+  padding: 20px 12px 28px;
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.welcome-logo {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 18px;
+}
+
+.welcome-logo-img {
+  max-width: 240px;
+  width: 100%;
+  height: auto;
+}
+
+.welcome-card {
+  width: 100%;
+  max-width: 380px;
+  background: #ffffff;
+  border-radius: 28px;
+  padding: 28px 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+  border: 1px solid rgba(0, 0, 0, 0.04);
+}
+
+.welcome-card h1 {
+  margin: 0 0 8px 0;
+  font-size: 48px;
+  line-height: 1.1;
+  color: #001f3f;
+  text-align: center;
+  font-weight: 900;
+  letter-spacing: -0.5px;
+}
+
+.welcome-card p {
+  margin: 0 auto 22px auto;
+  text-align: center;
+  color: #4a4a4a;
+  font-size: 16px;
+  max-width: 95%;
+  line-height: 1.4;
+}
+
+.option-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 14px 16px;
+  border-radius: 20px;
+  border: 2px solid;
+  margin-bottom: 16px;
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+  cursor: pointer;
+}
+
+.option-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+}
+
+.customer-card {
+  border-color: #00b7a8;
+  background: rgba(0, 183, 168, 0.08);
+}
+
+.manager-card {
+  border-color: #ff7700;
+  background: rgba(255, 119, 0, 0.08);
+}
+
+.provider-card {
+  border-color: #3959d2;
+  background: rgba(57, 89, 210, 0.08);
+}
+
+.option-icon {
+  min-width: 80px;
+  max-width: 80px;
+  min-height: 80px;
+  max-height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.customer-icon {
+  background: #00b7a8;
+}
+
+.manager-icon {
+  background: #ff7700;
+}
+
+.provider-icon {
+  background: rgba(57, 89, 210, 0.12);
+  border-radius: 50%;
+}
+
+.provider-inner {
+  width: 76px;
+  height: 76px;
+  border-radius: 50%;
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+}
+
+.option-icon ion-icon {
+  font-size: 40px;
+  color: #ffffff;
+}
+
+.provider-image {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+
+.option-text {
+  flex: 1;
+}
+
+.option-text h2 {
+  margin: 0;
+  font-size: 20px;
+  color: #0f3b63;
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.customer-card .option-text h2 {
+  color: #00b7a8;
+}
+
+.manager-card .option-text h2 {
+  color: #ff7700;
+}
+
+.provider-card .option-text h2 {
+  color: #3959d2;
+}
+
+.customer-card .option-text p,
+.manager-card .option-text p,
+.provider-card .option-text p {
+  margin: 4px 0 0;
+  color: #333333;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.option-arrow {
+  font-size: 26px;
+  color: #0f3b63;
+  flex-shrink: 0;
+}
+
+.customer-card .option-arrow {
+  color: #00b7a8;
+}
+
+.manager-card .option-arrow {
+  color: #ff7700;
+}
+
+.provider-card .option-arrow {
+  color: #3959d2;
+}
+
+.footer-security {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.line {
+  flex: 1;
+  height: 1px;
+  background: #dfe9ef;
+}
+
+.shield-icon {
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  background: rgba(0, 183, 168, 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.shield-icon ion-icon {
+  font-size: 26px;
+  color: #00a99d;
+}
+
+.footer-text {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  margin-top: 14px;
+  color: #4a4a4a;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+@media (max-width: 520px) {
+  .welcome-screen {
+    padding: 18px 12px 24px;
+  }
+
+  .welcome-card {
+    padding: 22px 16px;
+    border-radius: 26px;
+    max-width: 360px;
+  }
+
+  .welcome-card h1 {
+    font-size: 42px;
+  }
+
+  .option-card {
+    padding: 12px 14px;
+    border-radius: 18px;
+  }
+
+  .option-icon {
+    min-width: 76px;
+    min-height: 76px;
+    max-width: 76px;
+    max-height: 76px;
+  }
+
+  .provider-inner {
+    width: 72px;
+    height: 72px;
+  }
+
+  .provider-image {
+    width: 52px;
+    height: 52px;
+  }
+
+  .option-text h2 {
+    font-size: 18px;
+  }
+
+  .option-text p {
+    font-size: 13px;
+  }
+
+  .option-arrow {
+    font-size: 24px;
+  }
+}
