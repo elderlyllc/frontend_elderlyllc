@@ -9,6 +9,8 @@ const apiEndpoints = {
   register: `${apiRootURL}/api/register`,
   forgetPassword: `${apiRootURL}/api/forget-password`,
   sendOtp: `${apiRootURL}/api/send-otp`,
+  verifyOtp: `${apiRootURL}/api/verify-otp`,
+  getUpcomingServices: `${apiRootURL}/api/upcoming-services`,
 
   subscriptionList: `${apiRootURL}/api/subscriptions`,
 
@@ -35,6 +37,10 @@ markNotificationRead: (id: number) => `${apiRootURL}/api/notifications/read/${id
 markAllNotificationsRead: (userId: number) =>
   `${apiRootURL}/api/notifications/read-all/${userId}`,
 deleteNotification: (id: number) => `${apiRootURL}/api/notifications/${id}`,
+
+
+//Mapping
+getPincodeMapping: `${apiRootURL}/api/subscription-pincode-mappings`,
 
   baseURL: apiRootURL,
 };

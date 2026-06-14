@@ -13,3 +13,16 @@ export const subscriptionList = async () => {
   }
 };
 
+
+
+export const custmersubscriptionlist = async () => {
+  try {
+    const response = await api.get(apiEndpoints.getPincodeMapping);
+
+    return response.data; // Axios already parses JSON
+  } catch (error: any) {
+    throw new Error(
+      error.response?.data?.error || error.response?.data?.message || "Failed to fetch subscriptions"
+    );
+  }
+};

@@ -1,0 +1,142 @@
+.manager-wrapper {
+  --background: #edf7f5;
+}
+
+.manager-top-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 25px 20px 15px;
+}
+
+.manager-top-section h1 {
+  margin: 0;
+  color: #082b73;
+  font-size: 28px;
+  font-weight: 700;
+}
+
+.manager-top-section p {
+  margin-top: 5px;
+  color: #6b7280;
+  font-size: 14px;
+}
+
+.manager-avatar {
+  width: 55px;
+  height: 55px;
+  border-radius: 50%;
+  background: #082b73;
+  color: white;
+  font-size: 22px;
+  font-weight: bold;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.stats-row {
+  display: flex;
+  gap: 12px;
+  padding: 0 20px;
+  margin-bottom: 20px;
+}
+
+.stat-card {
+  flex: 1;
+  background: white;
+  border-radius: 18px;
+  padding: 18px 10px;
+  text-align: center;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+}
+
+.stat-card h2 {
+  margin: 0;
+  color: #082b73;
+  font-size: 26px;
+}
+
+.stat-card span {
+  color: #6b7280;
+  font-size: 13px;
+}
+
+.search-container {
+  padding: 0 20px;
+}
+
+.search-container input {
+  width: 100%;
+  height: 52px;
+  border: none;
+  outline: none;
+  border-radius: 15px;
+  padding: 0 16px;
+  background: white;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+}
+
+.section-title {
+  padding: 25px 20px 15px;
+  font-size: 20px;
+  font-weight: 700;
+  color: #082b73;
+}
+
+.customer-list {
+  padding: 0 20px 40px;
+}
+
+.customer-card {
+  background: white;
+  border-radius: 20px;
+  padding: 18px;
+  margin-bottom: 15px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.05);
+}
+
+.customer-avatar-small {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: #dbe8ff;
+  color: #082b73;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 22px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.customer-details {
+  flex: 1;
+}
+
+.customer-details h3 {
+  margin: 0 0 10px;
+  color: #082b73;
+  font-size: 18px;
+}
+
+.info-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 5px;
+  font-size: 14px;
+}
+
+.label {
+  color: #6b7280;
+  font-weight: 600;
+  min-width: 60px;
+}
+
+.arrow {
+  font-size: 24px;
+  color: #082b73;
+}

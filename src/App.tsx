@@ -46,6 +46,7 @@ import Profile from './pages/Profile';
 import Login from './pages/Login';
 import Welcome from './pages/Welcome';
 import ServiceLogin from './pages/ServiceLogin';
+import ProviderServices from './pages/ProviderServices';
 import Home from './pages/Home';
 import Registration from './pages/Registration';
 import ForgetPassword from './pages/ForgetPasswod';
@@ -57,6 +58,7 @@ import NotFound from './pages/NotFound';
 import Tagging from './pages/Tagging';
 import StripePaymentPage from './pages/StripePaymen';
 import History from './pages/History';
+import SubscriptionPincodeMapping from './pages/SubscriptionPincodeMapping';
 
 setupIonicReact();
 
@@ -75,6 +77,9 @@ const App: React.FC = () => (
           </Route>
           <Route exact path="/service-login">
             <ServiceLogin />
+          </Route>
+          <Route exact path="/provider-services">
+            <ProviderServices />
           </Route>
           <Route exact path="/registration">
             <Registration />
@@ -102,6 +107,9 @@ const App: React.FC = () => (
           </Route>
           <Route exact path="/tagging">
             <Tagging />
+          </Route>
+           <Route exact path="/pmapping">
+            <SubscriptionPincodeMapping />
           </Route>
             <Route exact path="/payment">
             <StripePaymentPage />

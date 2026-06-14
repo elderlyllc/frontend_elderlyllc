@@ -73,3 +73,29 @@ export const sendOtp = async (email: string) => {
     );
   }
 };
+
+export const verifyOtp = async (email: string, otp: string) => {
+  try {
+    const response = await api.post(apiEndpoints.verifyOtp, { email, otp });
+    return response.data;
+  } catch (error: any) {
+    throw new Error(
+      error.response?.data?.message ||
+      error.response?.data?.error ||
+      "Failed to verify OTP"
+    );
+  }
+};
+
+export const getUpcomingServices = async () => {
+  try {
+    const response = await api.get(apiEndpoints.getUpcomingServices);
+    return response.data;
+  } catch (error: any) {
+    throw new Error(
+      error.response?.data?.message ||
+      error.response?.data?.error ||
+      "Failed to fetch upcoming services"
+    );
+  }
+};
