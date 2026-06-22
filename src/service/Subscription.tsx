@@ -26,3 +26,14 @@ export const custmersubscriptionlist = async () => {
     );
   }
 };
+
+export const getMappedUsers = async (managerId: number) => {
+  try {
+    const response = await api.get(apiEndpoints.getMappedUsers(managerId));
+    return response.data;
+  } catch (error: any) {
+    throw new Error(
+      error.response?.data?.error || error.response?.data?.message || "Failed to fetch mapped users"
+    );
+  }
+};

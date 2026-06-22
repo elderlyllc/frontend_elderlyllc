@@ -41,6 +41,7 @@ deleteNotification: (id: number) => `${apiRootURL}/api/notifications/${id}`,
 
 //Mapping
 getPincodeMapping: `${apiRootURL}/api/subscription-pincode-mappings`,
+getMappedUsers: (managerId: number) => `${apiRootURL}/api/managers/${managerId}/mapped-users`,
 
   baseURL: apiRootURL,
 };

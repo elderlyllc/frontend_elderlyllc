@@ -2,76 +2,46 @@ import React, { useEffect, useState } from "react";
 import { IonContent } from "@ionic/react";
 import MainLayout from "./layout/mainLayout";
 import "./SubscriptionPincodeMapping.css";
-import api from "../library/axios";
-import apiEndpoints from "../service/Common";
-//import { getPincodeMapping } from "../service/Subscription";
+import { getMappedUsers } from "../service/Subscription";
 
 const SubscriptionPincodeMapping: React.FC = () => {
   const [search, setSearch] = useState("");
-   const [customer,setCustomer] = useState("");
+  const [customers, setCustomers] = useState<any[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
-  const customers = [
-    {
-      id: 1,
-      name: "John Smith",
-      service: "Home Care",
-      area: "Colombo",
-    },
-    {
-      id: 2,
-      name: "Sarah Lee",
-      service: "Medical Transport",
-      area: "Kandy",
-    },
-    {
-      id: 3,
-      name: "Michael Tan",
-      service: "Elder Companion",
-      area: "Galle",
-    },
-    {
-      id: 4,
-      name: "Emma Wilson",
-      service: "Nursing Care",
-      area: "Negombo",
-    },
-  ];
+  useEffect(() => {
+    const fetchMappedUsers = async () => {
+      const managerId = localStorage.getItem("user_id");
+      if (!managerId) return;
+
+      setLoading(true);
+      try {
+        const data = await getMappedUsers(Number(managerId));
+        // API may return { data: [...] } or { users: [...] } or a plain array
+        const list = Array.isArray(data) ? data : (data?.data ?? data?.users ?? []);
+        setCustomers(list);
+      } catch (err: any) {
+        setError(err.message);
+        console.error("Failed to fetch mapped users:", err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchMappedUsers();
+  }, []);
 
   const filteredCustomers = customers.filter(
     (item) =>
-      item.name.toLowerCase().includes(search.toLowerCase()) ||
-      item.area.toLowerCase().includes(search.toLowerCase()) ||
-      item.service.toLowerCase().includes(search.toLowerCase())
+      item.name?.toLowerCase().includes(search.toLowerCase()) ||
+      item.area?.toLowerCase().includes(search.toLowerCase()) ||
+      item.service?.toLowerCase().includes(search.toLowerCase())
   );
-  
-    // useEffect(() => {
-    //   const fetchSubscription = async () => {
-    //     try {
-    //       const data = await getPincodeMapping();
-    //       console.log("Subscription data:", data);
-    //       setCustomer(data);
-        
-  
-    //       const userId = localStorage.getItem("user_id");
-    //       if (userId) {
-    //         const carts = await fetchCart();
-    //         const active = carts?.find(
-    //           (cart: any) => cart.createdBy === Number(userId) && cart.isactive === true
-    //         );
-    //         if (active) {
-    //           setActiveSubscriptionId(active.subscription_id);
-    //           setActiveCart(active);
-    //           history.push("/dashboard");
-    //           return;
-    //         }
-    //       }
-    //     } catch (error: any) {
-    //       console.error("Error fetching subscription data:", error.message);
-    //     }
-    //   };
-  
-    //   fetchSubscription();
-    // }, [history]);
+
+  const totalCustomers = customers.length;
+  const totalAreas = new Set(customers.map((c) => c.area).filter(Boolean)).size;
+  const totalServices = new Set(customers.map((c) => c.service).filter(Boolean)).size;
   
 
   return (
@@ -94,17 +64,17 @@ const SubscriptionPincodeMapping: React.FC = () => {
         <div className="stats-row">
 
           <div className="stat-card">
-            <h2>128</h2>
+            <h2>{totalCustomers}</h2>
             <span>Customers</span>
           </div>
 
           <div className="stat-card">
-            <h2>12</h2>
+            <h2>{totalAreas}</h2>
             <span>Areas</span>
           </div>
 
           <div className="stat-card">
-            <h2>56</h2>
+            <h2>{totalServices}</h2>
             <span>Services</span>
           </div>
 

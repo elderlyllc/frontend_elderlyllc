@@ -59,6 +59,7 @@ import Tagging from './pages/Tagging';
 import StripePaymentPage from './pages/StripePaymen';
 import History from './pages/History';
 import SubscriptionPincodeMapping from './pages/SubscriptionPincodeMapping';
+import ProtectedRoute from './components/ProtectedRoute';
 
 setupIonicReact();
 
@@ -109,7 +110,9 @@ const App: React.FC = () => (
             <Tagging />
           </Route>
            <Route exact path="/pmapping">
-            <SubscriptionPincodeMapping />
+            <ProtectedRoute allowedRoleId={3}>
+              <SubscriptionPincodeMapping />
+            </ProtectedRoute>
           </Route>
             <Route exact path="/payment">
             <StripePaymentPage />
